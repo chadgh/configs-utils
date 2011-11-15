@@ -1,0 +1,3 @@
+#!/bin/bash
+#conky -c /home/chansen4/.conkyrc;
+conky -c /home/chansen4/.conkyClockrc;

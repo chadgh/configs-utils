@@ -1,2 +1,3 @@
 * dotfiles - contains custom configuration files (bashrc, vimrc, etc).
-* bin - contains custom tools and utility functions.
+* mybin - contains custom tools and utility functions.
+* bin - contains tools and utility functions that I haven't written.

@@ -1,0 +1,102 @@
+#!/usr/bin/python
+#-*-coding: UTF-8-*-
+import os
+import sys
+import getopt
+import subprocess
+import re
+
+# set the todo.text file filename and path
+todoFile = '~/Dropbox/worktodo.text'
+todoFile = os.path.expanduser(todoFile)
+
+file = open(todoFile, "r")
+todoList = file.read()
+file.close()
+todoList = todoList.splitlines()
+nextItemNumber = 0
+for item in todoList:
+	if int(item[0:item.find('.')]) >= nextItemNumber:
+		nextItemNumber = int(item[0:item.find('.')]) + 1
+
+# check the command line arguments
+listArgs = ['l', 'ls', 'list']
+openArgs = ['o', 'open']
+addArgs = ['a', '+', 'add']
+doArgs = ['d', 'do', 'done', '-']
+priArgs = ['p1', 'p2', 'p3', 'p0', 'A', 'B', 'C', '0']
+
+if len(sys.argv) == 1:
+	file = open(todoFile, "r")
+	print file.read().strip()
+	file.close()
+
+elif (sys.argv[1] in listArgs) and len(sys.argv) == 2:
+	file = open(todoFile, "r")
+	print file.read().strip()
+	file.close()
+
+elif (sys.argv[1] in listArgs) and len(sys.argv) > 2:
+	searchTerms = ' '.join([arg.lower() for arg in sys.argv[2:]])
+	results = ''
+	for line in open(todoFile):
+		if searchTerms in line.lower():
+			results += line
+	if results == '':
+		results = "No items found."
+	print results.strip()
+
+elif sys.argv[1] in openArgs:
+	subprocess.call(['vim', todoFile])
+
+elif sys.argv[1] in addArgs:
+	appendText = " ".join(sys.argv[2:])
+	open(todoFile, "a").write(str(nextItemNumber) + '. ' + appendText + '\n')
+	print "TODO: " + appendText
+
+elif sys.argv[1] in doArgs:
+	completeNumber = int(sys.argv[2])
+	resp = ''
+	newFile = ''
+	for line in open(todoFile):
+		if int(line[0:line.find('.')]) == completeNumber:
+			resp = line	
+		else:
+			newFile += line
+	if resp == '':
+		resp = 'No item found.'
+	else:
+		open(todoFile, 'w').write(newFile)
+	print "DONE: " + resp.strip()
+
+elif sys.argv[1] in priArgs:
+	tempPriority = sys.argv[1]
+	priority = ''
+	if tempPriority in ['p1', 'A']:
+		priority = '(A)'
+	elif tempPriority in ['p2', 'B']:
+		priority = '(B)'
+	elif tempPriority in ['p3', 'C']:
+		priority = '(C)'
+	elif tempPriority in ['p0', '0']:
+		priority = '0'
+
+	itemNumber = int(sys.argv[2])
+	resp = ''
+	newFile = ''
+	for line in open(todoFile):
+		if int(line[0:line.find('.')]) == itemNumber:
+			if priority != '0' and priority != '': #adding a priority
+				resp = line.replace(str(itemNumber) + ". ", str(itemNumber) + ". " + priority + " ")
+				newFile += resp
+			elif priority == '0': #taking away the priority
+				resp = re.sub(r'\.\s\(.\)\s', '. ', line)
+				newFile += resp
+		else:
+			newFile += line
+	if resp == '':
+		resp = 'No item found.'
+	else:
+		open(todoFile, 'w').write(newFile)
+	print "PRI: " + resp.strip()
+

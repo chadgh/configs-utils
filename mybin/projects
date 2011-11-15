@@ -1,0 +1,44 @@
+#!/usr/bin/python
+import sys
+import os
+import subprocess
+
+# projects
+# projects [project-name]
+# projects [project-name] o
+# projects [project-name] cd
+
+def isinteger(x):
+	"""docstring for isinteger"""
+	try:
+		y = int(x)
+		x = int(x)
+		return y == x
+	except:
+		return False
+
+projects = os.listdir(os.path.expanduser("~/Dropbox/life/projects/"))
+
+if len(sys.argv) < 2:
+	print ""
+	count = 0
+	for p in projects:
+		count += 1
+		print "%i. %s" % (count, p)
+	print ""
+else: 
+	if isinteger(sys.argv[1]):
+		project = int(sys.argv[1])
+		projectName = projects[project - 1]
+	else:
+		projectName = sys.argv[1]
+
+	if len(sys.argv) > 2:
+		if sys.argv[2] == "o":
+			subprocess.call(['vim', os.path.expanduser("~/Dropbox/life/projects/" + projectName + "/README")])
+		elif sys.argv[2] == "cd":
+			print os.path.expanduser("~/Dropbox/life/projects/" + projectName)
+	else:
+		print "".join(open(os.path.expanduser("~/Dropbox/life/projects/" + projectName + "/README"), "r").readlines())
+
+

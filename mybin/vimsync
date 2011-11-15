@@ -1,0 +1,9 @@
+#!/bin/sh
+#sync .vim dir
+echo ".vim/ rsyncs";
+for server in chansen4@dev.lib.byu.edu chansen4@riker.lib.byu.edu chansen4@stg1.lib.byu.edu chansen4@stg2.lib.byu.edu chansen4@web5.lib.byu.edu chansen4@web9.lib.byu.edu chansen4@chadgh.com chadgh@chadgh.com
+do
+	rsync -aqrL --delete ~/.vim/ $server:~/.vim;
+	rsync -aqL ~/.vimrc $server:~/.vimrc;
+	echo "Synced to $server";
+done

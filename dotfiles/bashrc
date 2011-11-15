@@ -1,0 +1,173 @@
+export HISTCONTROL=ignoreboth
+shopt -s histappend
+shopt -s checkwinsize
+export TERM="xterm-256color"
+case "$TERM" in
+    xterm-color) color_prompt=yes;;
+esac
+force_color_prompt=yes
+if [ -n "$force_color_prompt" ]; then
+    if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
+		color_prompt=yes
+    else
+		color_prompt=
+    fi
+fi
+
+
+# git prompt
+source ~/bin/git-completion.bash
+# resty tool - curl for restful web services
+source ~/bin/resty
+# bash completion
+source /etc/bash_completion
+#bashmarks
+source ~/bin/bashmarks.sh
+
+# custom ps1 prompts
+if [ "$color_prompt" = yes ];
+then
+	PS1='\[\e]0;local\a\]\[\033[00;01;33m\]★ \[\033[00;35m\]\w \[\033[01;30m\]$(__git_ps1 "(%s) ")\[\033[01;33m\]➜ \[\033[0m\]'
+else
+  	PS1='★ \w ➜ '
+fi
+
+trap 'echo -ne "\e[0m"' DEBUG
+unset color_prompt force_color_prompt
+
+# enable color support of ls and also add handy aliases
+if [ -x /usr/bin/dircolors ]; then
+    eval "`dircolors -b`"
+    alias ls='ls --color=auto'
+
+    alias grep='grep --color=auto'
+fi
+##########
+
+set -o vi
+
+alias ll='ls -l -h'
+alias la='ls -A -h'
+alias lla='ll -a -h'
+
+
+alias vim='vim -p'
+alias gvim='gvim -p'
+alias vb='vim ~/.bashrc'
+alias sb='source ~/.bashrc'
+alias vimv='vim ~/.vimrc'
+alias vims='vim -S ~/.vimsession'
+
+alias clean='rm *.*~'
+
+alias syserver='synergys'
+alias syclient='synergyc chansen4-desktop'
+
+alias cupholder='eject -T'
+alias motd='cat /etc/motd'
+
+alias c='ssh chansen4@chaggie.com'
+alias dev='ssh chansen4@dev.lib.byu.edu'
+alias prod='ssh riker.lib.byu.edu'
+alias web9='ssh web9.lib.byu.edu'
+alias las='ssh web5.lib.byu.edu'
+alias stag='ssh stg2.lib.byu.edu'
+alias stag1='ssh stg1.lib.byu.edu'
+#alias prod='gnome-terminal -t Production -e "ssh riker.lib.byu.edu"'
+#alias web9='gnome-terminal -t "Web 9" -e "ssh web9.lib.byu.edu"'
+#alias las='gnome-terminal -t "Web 5" -e "ssh web5.lib.byu.edu"'
+#alias stag='gnome-terminal -t "Staging 2" -e "ssh stg2.lib.byu.edu"'
+#alias stag1='gnome-terminal -t "Staging 1" -e "ssh stg1.lib.byu.edu"'
+
+alias get='git'
+alias gitci='git ci -a -m'
+
+alias ctime='date +%r'
+alias sshx='ssh -X'
+alias r='reset'
+
+alias suin='sudo apt-get install'
+alias aptsearch='apt-cache search'
+alias speak='espeak -v english-us -g4'
+
+
+alias wallpaper='php ~/bin/fontpaper.php -i ~/wallpaper.jpg -s 2560x1600 -l \& -b 000000 -f 333333'
+
+#function devim () {
+	#loc="scp://ds1.lib.byu.edu//home/chansen4/$1"
+	#gvim $loc
+#}
+
+function p () { 
+	if [ $# = 2 ]; then
+		if [ "$2" = "cd" ]; then
+			dir=`projects $*`
+			cd $dir;
+			ll
+		else
+			projects $*
+		fi
+	else
+		projects $*
+	fi
+}
+
+alias popular="history | awk '{a[\$2]++}END{for(i in a){print a[i] \" \" i}}' | sort -rn | head -12"
+alias tp="t | sed 's/[0-9]*\.\s//' | sort"
+alias ts="t | sort"
+alias wp="w | sed 's/[0-9]*\.\s//' | sort"
+alias ws="w | sort"
+
+alias colors='( x=`tput op` y=`printf %$((${COLUMNS}-6))s`;for i in {0..256};do o=00$i;echo -e ${o:${#o}-3:3} `tput setaf $i;tput setab $i`${y// /=}$x;done; )'
+
+alias cmy='ssh -4fNg -L 3307:mysql.chadgh.com:3306 chadgh.com'
+alias cmyconn='mysql -h 127.0.0.1 -P 3307 -p -u'
+alias ack='ack-grep'
+alias myip='curl icanhazip.com'
+alias open='gnome-open'
+
+alias whoisthere="who | awk \"{print \$1}\" | sort | uniq"
+alias openfiles="w | awk '\$7 == \"vim\" {print \$1,'\t',\$8}'"
+
+alias ports='sudo netstat -anp --tcp --udp | grep LISTEN'
+alias restartapache='sudo /etc/init.d/apache2 restart'
+alias up='updir'
+
+cmdfu(){ curl "http://www.commandlinefu.com/commands/matching/$@/$(echo -n $@ | openssl base64)/plaintext"; }
+
++ () { echo "$*" | bc -l; }
+
+updir(){
+	if [ $# -gt 0 ];then
+		path=""
+		for (( i=1; i<=$1; i++ )); do
+			path=$path"../"
+		done
+		cd $path
+	else
+		cd ../
+	fi
+}
+
+showtime(){
+	while sleep 1;do tput sc;tput cup 0 $(($(tput cols)-9));date +"%I:%M %P";tput rc;done &
+}
+
+remind(){
+	echo "espeak -v english-us -g2 -a 400 -s 150 \"$2\"" | at $1
+}
+
+later(){
+	command=(${@:2:$#})
+	echo "${command[@]}" | at $1
+}
+
+man () {
+	/usr/bin/man $@ || (help $@ 2> /dev/null && help $@ | less)
+}
+
+# Add android tools to the PATH
+PATH="$HOME/android_sdk/current/tools:$HOME/android_sdk/current/platforms/current/tools:$PATH"
+PYTHONPATH="$HOME/Dropbox/life/projects:$PYTHONPATH"
+PATH="$HOME/inksite:$PATH"
+[[ -s $HOME/.pythonbrew/etc/bashrc ]] && source $HOME/.pythonbrew/etc/bashrc

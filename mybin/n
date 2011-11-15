@@ -1,0 +1,63 @@
+#!/usr/bin/python
+#-*-coding: UTF-8-*-
+import os
+import sys
+import getopt
+import subprocess
+
+directory = '~/notes/'
+directory = os.path.expanduser(directory)
+notes = []
+for dirname, dirnames, filenames in os.walk(directory):
+	for filename in filenames:
+		notes.append([os.path.join(dirname, filename), filename])
+
+notes.sort(key=lambda x: x[1])
+
+# get the command line arguments
+options, args = getopt.getopt(sys.argv[1:], 'hls', ["help", "list", "search"])
+options = [opt[0] for opt in options]
+
+if '-h' in options or '--help' in options or (len(options) == 0 and len(args) == 0):
+	helpStr = """Usage: %s [options] [search terms]
+\t-h or --help : display this help
+\t-l or --list : list all notes
+\t-s or --search : search through all notes for a matching search term
+\t With no options specified the search terms are used to find matching note titles
+\t if one not title matches that note is opened, if no note titles match a new note
+\t is created with the specified title. Otherwise all matching note titles are listed.
+	""" % (sys.argv[0])
+	print helpStr
+
+elif '-l' in options or '--list' in options:
+	print "\033[00;35mNOTES: \033[m"
+	for filename in notes:
+		print "\033[00;33m – \033[00;33m" + filename[1].replace('_', ' ').replace('.text', '')
+
+elif '-s' in options or '--search' in options:
+	searchNotes = ' '.join([arg.lower() for arg in args])
+	print "\033[00;35mRESULTS: \033[m"
+	for note in notes:
+		for line in open(note[0]):
+			if searchNotes in line.lower():
+				foundLine = line.replace(searchNotes, "\033[00;33m" + searchNotes + "\033[00;m")
+				foundLine = foundLine.replace("\n", '')
+				print "\033[00;01;33m" + note[1].replace('.text', '') + " \033[00;m" + foundLine
+
+else:
+	searchNoteName = '_'.join([arg.lower() for arg in args])
+
+	filenamepath = ''
+	matches = [filename[1] for filename in notes if filename[1].startswith(searchNoteName)]
+
+	if len(matches) == 0:
+		filenamepath = os.path.join(directory, searchNoteName + '.text')
+	elif len(matches) == 1:
+		filenamepath = os.path.join(directory, matches[0])
+
+	if filenamepath != '':
+		subprocess.call(['vim', filenamepath])
+	else:
+		print "\033[00;35mMATCHING NOTES: \033[m"
+		for filename in matches:
+			print "\033[00;33m – \033[00;33m" + filename.replace('_', ' ').replace('.text', '')

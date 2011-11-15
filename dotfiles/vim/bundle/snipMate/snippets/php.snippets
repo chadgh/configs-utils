@@ -1,0 +1,167 @@
+snippet php
+	<?php
+	${1}
+	?>
+snippet inc
+	include('${1:file}');
+	${2}
+snippet inco
+	include_once('${1:file}');
+	${2}
+snippet req
+	require('${1:file}');
+	${2}
+snippet reqo
+	require_once('${1:file}');
+	${2}
+snippet cookie
+	$_COOKIE['${1:variable}']${2}
+snippet env
+	$_ENV['${1:variable}']${2}
+snippet files
+	$_FILES['${1:variable}']${2}
+snippet get
+	$_GET['${1:variable}']${2}
+snippet post
+	$_POST['${1:variable}']${2}
+snippet request
+	$_REQUEST['${1:variable}']${2}
+snippet server
+	$_SERVER['${1:variable}']${2}
+snippet session
+	$_SESSION['${1:variable}']${2}
+# Start Docblock
+snippet /*
+	/**
+	 * ${1}
+	 **/
+# Class Variable
+snippet var
+	/**
+	 * ${3:undocumented class variable}
+	 *
+	 * @var ${4:string}
+	 **/
+	${1:var} $${2};
+	${5}
+# Class
+snippet class
+	/**
+	 * $1
+	 * ${2:undocumented class}
+	 *
+	 * @package ${3:default}
+	 * ${4:@subpackage }${5:default}
+	 * @author ${6:`g:snips_author`}
+	 **/
+	class ${1:ClassName}
+	{
+		function __construct(${7:$arguments})
+		{
+			${8}
+		}
+	}
+# define(...)
+snippet def
+	define('${1}', ${2});
+	${3}
+snippet while
+	while (${1:/* condition */})
+	{
+		${2}
+	}
+# do ... while
+snippet do
+	do
+	{
+		${2}
+	} while (${1:/* condition */});
+snippet if
+	if (${1:/* condition */})
+	{
+		${2}
+	}
+snippet ife
+	if (${1:/* condition */})
+	}
+		${2}
+	}
+	else
+	{
+		${3}
+	}
+	${4}
+snippet else
+	else
+	{
+		${1}
+	}
+snippet elseif
+	elseif (${1:/* condition */})
+	{
+		${2}
+	}
+# Tertiary conditional
+snippet t
+	$${1:retVal} = (${2:condition}) ? ${3:a} : ${4:b};
+	${5}
+snippet switch
+	switch ($${1:variable})
+	{
+		case '${2:value}':
+			${3:// code...}
+			break;
+		${5}
+		default:
+			${4:// code...}
+			break;
+	}
+snippet case
+	case '${1:value}':
+		${2:// code...}
+		break;${3}
+snippet for
+	for ($${2:i} = 0; $$2 < ${1:count}; $$2${3:++})
+	{
+		${4}
+	}
+snippet foreach
+	foreach ($${1:variable} as $${2:key})
+	{
+		${3}
+	}
+snippet func
+	/**
+	 * $2
+	 * ${4:undocumented function}
+	 *
+	 * @author ${5:`g:snips_author`}
+	 * @param $3
+	 * @return ${6:void}
+	 **/
+	${1:public} function ${2:FunctionName}(${3})
+	{
+		${7}
+	}
+snippet fun
+	${1:public }function ${2:FunctionName}(${3})
+	{
+		${4}
+	}
+snippet this
+	$this->${1}
+snippet getf
+	${1:public} function get${2:Property}()
+	{
+		return $this->$2;
+	}
+	${3}
+snippet setf
+	${1:public} function set${2:Property}($${3:input})
+	{
+		$this->$2 = $$3;
+	}
+	${4}
+snippet trig
+	trigger_error('${1}' . ${2:$var});
+	${3}

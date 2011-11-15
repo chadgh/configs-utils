@@ -1,0 +1,59 @@
+#!/usr/bin/python
+# new project project_name
+# new workproject project_name
+# new classproject class project_name
+
+import sys
+import os
+import errno
+import subprocess
+
+pathName = "~/Dropbox/life/"
+pathName = os.path.expanduser(pathName)
+
+if len(sys.argv) < 2:
+	print "Usage: new [project type] [project_name]\n"
+elif sys.argv[1] == 'project' or sys.argv[1] == 'p':
+	projectName = sys.argv[2]
+	path = "%sprojects/%s/" % (pathName, projectName)
+	try:
+		os.makedirs(path)
+		with file(path + "README", "a"):
+			os.utime(path + "README", None)
+		subprocess.call(["gvim", path + "README"])
+	except OSError as exc:
+		if exc.errno == errno.EEXIST:
+			pass
+	
+elif sys.argv[1] == 'workproject' or sys.argv[1] == 'wp':
+	projectName = sys.argv[2]
+	path = "%swork/projects/%s/" % (pathName, projectName)
+	try:
+		os.makedirs(path)
+		with file(path + "README", "a"):
+			os.utime(path + "README", None)
+		subprocess.call(["gvim", path + "README"])
+	except OSError as exc:
+		if exc.errno == errno.EEXIST:
+			pass
+		else: raise
+
+elif sys.argv[1] == 'classproject' or sys.argv[1] == 'cp':
+	if len(sys.argv) < 4:
+		print "Usage: new classproject [class] [project_name]\n"
+	else:
+		projectName = sys.argv[3]
+		className = sys.argv[2]
+		path = "%sschool/classes/%s/%s/" % (pathName, className, projectName)
+		try:
+			os.makedirs(path)
+			with file(path + "README", "a"):
+				os.utime(path + "README", None)
+			subprocess.call(["gvim", path + "README"])
+		except OSError as exc:
+			if exc.errno == errno.EEXIST:
+				pass
+			else: raise
+		
+else:
+	print "Usage: new [project|workproject] [project_name]\n"
