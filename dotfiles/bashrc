@@ -16,13 +16,13 @@ fi
 
 
 # git prompt
-source ~/bin/git-completion.bash
+source $HOME/configs-utils/bin/git-completion.bash
 # resty tool - curl for restful web services
-source ~/bin/resty
+source $HOME/configs-utils/bin/resty
 # bash completion
 source /etc/bash_completion
 #bashmarks
-source ~/bin/bashmarks.sh
+source $HOME/configs-utils/bin/bashmarks.sh
 
 # custom ps1 prompts
 if [ "$color_prompt" = yes ];
