@@ -1,7 +1,9 @@
 #!/usr/bin/python
 #-*-coding: UTF-8-*-
 
-#built with python 2.7.2
+#author: Chad G Hansen
+#note: built with python 2.7.2
+#copyright: do whatever you want with it, just attribute me (Chad G Hansen).
 
 #imports
 import os
@@ -17,7 +19,9 @@ todoFile = os.path.expanduser(todoFile)
 parser = argparse.ArgumentParser(prog='./todo', description='A simple todo list manager.')
 #command line arguments
 parser.add_argument('-l', '--list', dest='list', action='store_true', default=False, help='Lists todo items.')
-parser.add_argument('-s', '--search', dest='search_terms', default='', help='Lists todo items that match a search term.')
+parser.add_argument('-s', '--search', dest='search_terms', default=[], nargs='+', help='Lists todo items that match the specified search terms.')
+parser.add_argument('-t', '--tag-search', dest='tag_search_terms', default=[], nargs='+', help='Lists todo items that match the specified tags.')
+parser.add_argument('-v', '--verbose', help='Verbose output on searching (both keyword and tags).', dest='verbose_output', default=False, action='store_true')
 parser.add_argument('-n', '--next', dest='next', action='store_true', default=False, help='Displays the next item.');
 parser.add_argument('-o', '--open', dest='open_with', default='', help='Opens the todo list in the editor specified.');
 parser.add_argument('-a', '--add', dest='item_to_add', default='', help='Adds a new item to the bottom of the todo list.');
@@ -49,12 +53,28 @@ elif args.list:
 	print file.read().strip()
 	file.close()
 
-elif args.search_terms != '':
-	searchTerms = ' '.join([arg.lower() for arg in args.search_terms])
+elif len(args.search_terms) > 0:
+	searchTerms = ' '.join([term.lower().strip() for term in args.search_terms])
 	results = ''
+	if args.verbose_output:
+		print 'Search for: ' + searchTerms
 	for line in open(todoFile):
 		if searchTerms in line.lower():
 			results += line
+	if results == '':
+		results = "No items found."
+	print results.strip()
+
+elif len(args.tag_search_terms) > 0:
+	searchTerms = ['#' + term.lower().strip() for term in args.tag_search_terms]
+	results = ''
+	if args.verbose_output:
+		print 'Search for tags: ' + ' or '.join(searchTerms)
+	for line in open(todoFile):
+		for term in searchTerms:
+			if term in line.lower():
+				results += line
+				break;
 	if results == '':
 		results = "No items found."
 	print results.strip()
