@@ -118,4 +118,4 @@ alias motd='cat /etc/motd'
 alias speak='espeak -v english-us -g4'
 cmdfu(){ curl "http://www.commandlinefu.com/commands/matching/$@/$(echo -n $@ | openssl base64)/plaintext"; }
 
-PATH="$HOME/config-utils/bin:$HOME/config-utils/mybin:$HOME/bin:$HOME/mybin:$PATH"
+PATH="$HOME/configs-utils/bin:$HOME/configs-utils/mybin:$HOME/bin:$HOME/mybin:$PATH"
