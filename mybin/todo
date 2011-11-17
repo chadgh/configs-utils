@@ -24,7 +24,7 @@ parser.add_argument('-t', '--tag-search', dest='tag_search_terms', default=[], n
 parser.add_argument('-v', '--verbose', help='Verbose output on searching (both keyword and tags).', dest='verbose_output', default=False, action='store_true')
 parser.add_argument('-n', '--next', dest='next', action='store_true', default=False, help='Displays the next item.');
 parser.add_argument('-o', '--open', dest='open_with', default='', help='Opens the todo list in the editor specified.');
-parser.add_argument('-a', '--add', dest='item_to_add', default='', help='Adds a new item to the bottom of the todo list.');
+parser.add_argument('-a', '--add', dest='item_to_add', default=[], nargs='+',  help='Adds a new item to the bottom of the todo list.');
 parser.add_argument('-d', '--done', dest='item_to_remove', default=0, type=int, metavar="NUM", help='Removes the specified item from the todo list.');
 parser.add_argument('-p1', '--priority-1', dest='items_for_priority_1', default=0, type=int, metavar="NUM", help='Change priority on the specified item.');
 parser.add_argument('-p2', '--priority-2', dest='items_for_priority_2', default=0, type=int, metavar="NUM", help='Change priority on the specified item.');
@@ -82,7 +82,7 @@ elif len(args.tag_search_terms) > 0:
 elif args.open_with != '':
 	subprocess.call([args.open_with, todoFile])
 
-elif args.item_to_add != '':
+elif len(args.item_to_add) > 0:
 	appendText = " ".join(args.item_to_add)
 	open(todoFile, "a").write(str(nextItemNumber) + '. ' + appendText + '\n')
 	print "+ TODO: " + appendText
