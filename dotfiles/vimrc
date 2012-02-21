@@ -10,6 +10,10 @@ filetype plugin indent on
 "not compatible with vi
 set nocompatible
 
+"no beeping
+set noerrorbells novisualbell
+autocmd VimEnter * set vb t_vb=
+
 "I don't use modelines, so shut them off
 set modelines=0
 
@@ -35,6 +39,10 @@ set smartindent
 
 "makes hidden buffers easier to create
 set hidden
+
+"change the title to include the current file
+set icon
+auto BufEnter * let &iconstring = "vim " . expand("%:t")
 
 "allows for split windows to say the size I set them
 set noequalalways
@@ -165,7 +173,7 @@ if has("gui_running")
 	color lucius
 	set guifont=monaco\ 10
 	"set guifont=Ubuntu\ Mono\ 12
-	set lines=65 columns=140
+	set lines=65 columns=100
 else
 	colorscheme lucius
 endif
@@ -219,9 +227,9 @@ nmap <silent> <leader>vs :source ~/.vimrc<CR>
 "toggle line wrapping [wrap]
 map <leader>w :set wrap!<CR>
 " setup for writing mode - wrap, lbr, spelling, no line numbers, bigger line height and bigger font [writing mode]
-map <silent> <leader>wm :set wrap<CR>:set lbr<CR>:set spell<CR>:set nonumber<CR>:set linespace=5<CR>:set norelativenumber<CR>:set guifont=monaco\ 15<CR>
+map <silent> <leader>wm :VimroomToggle<CR>:set wrap<CR>:set lbr<CR>:set spell<CR>:set nonumber<CR>:set linespace=2<CR>:set norelativenumber<CR>:set guifont=monaco\ 15<CR>:set showbreak=<CR>
 "turn off writing mode [writing off]
-map <silent> <leader>wo :set nospell<CR>:set relativenumber<CR>>:set linespace=0<CR>:set guifont=monaco\ 10
+map <silent> <leader>wo :VimroomToggle<CR>:set nospell<CR>:set relativenumber<CR>>:set linespace=0<CR>:set guifont=monaco\ 10<CR>:set showbreak=…<CR>
 
 "commenting
 map <C-c> <leader>c<space>
@@ -259,6 +267,7 @@ map <C-b> :BuffergatorToggle<CR>
 map <C-n> :NERDTreeToggle<CR>
 "save session
 "map <C-m> :mksession! ~/.vimsession<CR>
+map <C-m> :mks!<CR>
 
 "disabled arrow keys
 "nnoremap <up> <nop>
@@ -351,7 +360,7 @@ endfunction
 command! -complete=shellcmd -nargs=* -bang Shell call s:ExecuteInShell(<q-args>, '<bang>')
 cabbrev shell Shell
 
-function MyCalc(str)
+function! MyCalc(str)
   if exists("g:MyCalcRounding")
     return system("echo 'x=" . a:str . ";d=.5/10^" . g:MyCalcPresition
           \. ";if (x<0) d=-d; x+=d; scale=" . g:MyCalcPresition . ";print x/1' | bc -l")
