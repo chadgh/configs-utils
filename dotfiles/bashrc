@@ -24,13 +24,9 @@ source $HOME/configs-utils/bin/resty
 # bash completion
 source /etc/bash_completion
 #bashmarks
-<<<<<<< HEAD
 #source $HOME/configs-utils/bin/bashmarks.sh
 # command not found hook
 source /usr/share/pkgtools/pkgfile-hook.bash
-=======
-source $HOME/configs-utils/bin/bashmarks.sh
->>>>>>> b9903e2d219a57e9d5d84d4a6292ae9db4f433c2
 
 # custom ps1 prompts
 if [ "$color_prompt" = yes ];
@@ -92,7 +88,6 @@ alias suin='sudo apt-get install'
 alias aptsearch='apt-cache search'
 
 #todo helps
-<<<<<<< HEAD
 tt () { todo -t $* | sort -n | grep -i "#$*"; }
 ts () { todo -s $* | sort -n | grep -i "$*"; }
 ta () { todo -a $*; }
@@ -102,15 +97,6 @@ tv () { todo -o vim; }
 
 #helpful helps
 alias mplayergl='mplayer -vo gl'
-=======
-tt () { todo -t $* | sort -n | grep "#$*"; }
-ts () { todo -s $* | sort -n | grep "#$*"; }
-ta () { todo -a $* }
-td () { todo -d $* }
-t () { todo -l }
-
-#helpful helps
->>>>>>> b9903e2d219a57e9d5d84d4a6292ae9db4f433c2
 alias whoisthere="who | awk \"{print \$1}\" | sort | uniq"
 alias ports='sudo netstat -anp --tcp --udp | grep LISTEN'
 alias restartapache='sudo /etc/init.d/apache2 restart'
