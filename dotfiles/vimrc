@@ -1,6 +1,6 @@
 let mapleader = ','
 
-let g:snips_author = 'Chad G Hansen'
+let g:snips_author = 'Chad G. Hansen (chadgh)'
 
 "Filetype stuff
 filetype off

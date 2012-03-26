@@ -22,7 +22,8 @@ source $HOME/configs-utils/bin/git-completion.bash
 # resty tool - curl for restful web services
 source $HOME/configs-utils/bin/resty
 # bash completion
-source /etc/bash_completion
+#source /etc/bash_completion
+source /usr/share/bash-completion/bash_completion
 #bashmarks
 #source $HOME/configs-utils/bin/bashmarks.sh
 # command not found hook
