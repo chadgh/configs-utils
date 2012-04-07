@@ -257,6 +257,9 @@ map ,ct cst
 "visually select the las edited pasted line
 nmap gV `[v`]
 
+"json view
+nmap <leader>j !!python -c "import sys,json; print(json.dumps(json.loads(sys.stdin.read()), indent=4))"<CR>
+
 "new tab
 map <C-t> :tabnew<CR>
 

@@ -38,6 +38,7 @@ else:
 			subprocess.call(['vim', os.path.expanduser("~/Dropbox/life/projects/" + projectName + "/README")])
 		elif sys.argv[2] == "cd":
 			print os.path.expanduser("~/Dropbox/life/projects/" + projectName)
+			#subprocess.call(['cd', os.path.expanduser("~/Dropbox/life/projects/" + projectName)])
 	else:
 		print "".join(open(os.path.expanduser("~/Dropbox/life/projects/" + projectName + "/README"), "r").readlines())
 
