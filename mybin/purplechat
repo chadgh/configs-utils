@@ -1,0 +1,19 @@
+#!/usr/bin/python2
+import dbus, gobject
+import sys
+
+person = " ".join(sys.argv[1:])
+bus = dbus.SessionBus()
+
+obj = bus.get_object("im.pidgin.purple.PurpleService", "/im/pidgin/purple/PurpleObject")
+purple = dbus.Interface(obj, "im.pidgin.purple.PurpleInterface")
+account = purple.PurpleAccountsGetAllActive()[0]
+buddies = {}
+buddiesIds = purple.PurpleFindBuddies(account, '')
+for buddy in buddiesIds:
+	alias = purple.PurpleBuddyGetAlias(buddy)
+	name = purple.PurpleBuddyGetName(buddy)
+	buddies[alias] = {'alias':alias, 'name':name, 'id':buddy}
+
+if person in buddies:
+	purple.PurpleConversationNew(1, account, buddies[person]['name'])
