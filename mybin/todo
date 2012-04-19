@@ -39,6 +39,7 @@ file.close()
 todoList = todoList.splitlines()
 nextItemNumber = 1
 for item in todoList:
+	if item.strip() == '': continue
 	if int(item[0:item.find('.')]) >= nextItemNumber:
 		nextItemNumber = int(item[0:item.find('.')]) + 1
 
