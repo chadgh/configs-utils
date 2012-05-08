@@ -17,6 +17,34 @@ autocmd VimEnter * set vb t_vb=
 "I don't use modelines, so shut them off
 set modelines=0
 
+"from scott's
+"
+"
+"set laststatus=2
+ "33 set statusline=%F%m%r%h%w\ [TYPE=%Y\ %{&ff}]\ [%l/%L\ (%p%%)]
+ "Insert/Replace Context-specific coloring
+ " 10 highlight LineNr term=none cterm=NONE ctermfg=117 ctermbg=darkgray
+ " gui=NONE guifg=DarkGrey guibg=NONE
+ "  11 function! InsertLineNumberColor(mode)
+ "   12     if a:mode == 'i'
+ "    13         hi LineNr ctermbg=22 
+ "     14     elseif a:mode == 'r'
+ "      15         hi LineNr ctermbg=52
+ "       16     else
+ "        17         hi LineNr ctermbg=red
+ "         18     endif
+ "          19 endfunction
+ "           20 au InsertEnter  * call InsertLineNumberColor(v:insertmode)
+ "            21 au InsertChange * call InsertLineNumberColor(v:insertmode)
+ "             22 au InsertLeave  * hi LineNr ctermbg=darkgray
+ "
+"
+"
+"
+"
+"
+"
+
 "set up tabs
 set tabstop=4
 set shiftwidth=4
@@ -270,6 +298,7 @@ map <C-b> :BuffergatorToggle<CR>
 map <C-n> :NERDTreeToggle<CR>
 "save session
 "map <C-m> :mksession! ~/.vimsession<CR>
+"TODO change this
 map <C-m> :mks!<CR>
 
 "disabled arrow keys

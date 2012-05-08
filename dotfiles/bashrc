@@ -88,15 +88,8 @@ alias gitci='git ci -a -m'
 alias suin='sudo apt-get install'
 alias aptsearch='apt-cache search'
 
-#todo helps
-tt () { todo -t $* | sort -n | grep -i "#$*"; }
-ts () { todo -s $* | sort -n | grep -i "$*"; }
-ta () { todo -a $*; }
-td () { todo -d $*; }
-to () { todo -o gvim; }
-tv () { todo -o vim; }
-
 #helpful helps
+alias pacmaninstalled="pacman -Qi | awk '/^Name/ {pkg=$3} /Size/ {print $4$5,pkg}' | sort -n"
 alias mplayergl='mplayer -vo gl'
 alias whoisthere="who | awk \"{print \$1}\" | sort | uniq"
 alias ports='sudo netstat -anp --tcp --udp | grep LISTEN'
