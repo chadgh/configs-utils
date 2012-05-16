@@ -14,10 +14,10 @@ import re
 
 # set the todo.text file filename and path
 todoFile = '~/Dropbox/todo.text'
-todoFile = os.path.expanduser(todoFile)
 
 parser = argparse.ArgumentParser(prog='./todo', description='A simple todo list manager.')
 #command line arguments
+parser.add_argument('-f', '--file', dest='todo_file', default='', help='Optionally specify the todo file to use.')
 parser.add_argument('-l', '--list', dest='list', action='store_true', default=False, help='Lists todo items.')
 parser.add_argument('-s', '--search', dest='search_terms', default=[], nargs='+', help='Lists todo items that match the specified search terms.')
 parser.add_argument('-t', '--tag-search', dest='tag_search_terms', default=[], nargs='+', help='Lists todo items that match the specified tags.')
@@ -32,7 +32,7 @@ parser.add_argument('-p3', '--priority-3', dest='items_for_priority_3', default=
 parser.add_argument('-rp', '--remove-priority', dest='items_for_priority_0', default=0, type=int, metavar="NUM", help='Change priority on the specified item.');
 
 args = parser.parse_args()
-
+todoFile = os.path.expanduser(todoFile if args.todo_file == '' else args.todo_file)
 file = open(todoFile, "r")
 todoList = file.read()
 file.close()

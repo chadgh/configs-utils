@@ -337,6 +337,10 @@ au BufNewFile,BufRead *.php map <F5> <Esc>:EnableFastPHPFolds<Cr>
 au BufNewFile,BufRead *.php map <F6> <Esc>:EnablePHPFolds<Cr>
 au BufNewFile,BufRead *.php map <F7> <Esc>:DisablePHPFolds<Cr>
 
+"For Python programing auto stuffs
+au BufNewFile,BufRead *.py set foldnestmax=2
+au BufNewFile,BufRead *.py set foldmethod=indent
+
 "Markdown auto stuffs
 "treat .text, README, and .md files as mkd files
 au! BufNewFile,BufRead *.text  set filetype=mkd
