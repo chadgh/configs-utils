@@ -298,9 +298,13 @@ map <C-b> :BuffergatorToggle<CR>
 map <C-n> :NERDTreeToggle<CR>
 "save session
 "map <C-m> :mksession! ~/.vimsession<CR>
-"TODO change this
-map <C-m> :mks!<CR>
+map <C-s> :mks! ~/.vimsession<CR>
 
+"folds
+"remove all folds
+map <C-z> :set foldmethod=manual<CR>zE
+"python folds
+map <C-p> :set foldmethod=indent<CR>
 "disabled arrow keys
 "nnoremap <up> <nop>
 "nnoremap <down> <nop>
