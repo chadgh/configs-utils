@@ -18,32 +18,23 @@ autocmd VimEnter * set vb t_vb=
 set modelines=0
 
 "from scott's
-"
-"
 "set laststatus=2
- "33 set statusline=%F%m%r%h%w\ [TYPE=%Y\ %{&ff}]\ [%l/%L\ (%p%%)]
- "Insert/Replace Context-specific coloring
- " 10 highlight LineNr term=none cterm=NONE ctermfg=117 ctermbg=darkgray
- " gui=NONE guifg=DarkGrey guibg=NONE
- "  11 function! InsertLineNumberColor(mode)
- "   12     if a:mode == 'i'
- "    13         hi LineNr ctermbg=22 
- "     14     elseif a:mode == 'r'
- "      15         hi LineNr ctermbg=52
- "       16     else
- "        17         hi LineNr ctermbg=red
- "         18     endif
- "          19 endfunction
- "           20 au InsertEnter  * call InsertLineNumberColor(v:insertmode)
- "            21 au InsertChange * call InsertLineNumberColor(v:insertmode)
- "             22 au InsertLeave  * hi LineNr ctermbg=darkgray
- "
-"
-"
-"
-"
-"
-"
+"set statusline=%F%m%r%h%w\ [TYPE=%Y\ %{&ff}]\ [%l/%L\ (%p%%)]
+""Insert/Replace Context-specific coloring
+"highlight LineNr term=none cterm=NONE ctermfg=117 ctermbg=darkgray gui=NONE guifg=DarkGrey guibg=NONE
+"function! InsertLineNumberColor(mode)
+"	if a:mode == 'i'
+"		hi LineNr ctermbg=22 
+"	elseif a:mode == 'r'
+"		hi LineNr ctermbg=52
+"	else
+"		hi LineNr ctermbg=red
+"	endif
+"endfunction
+"au InsertEnter  * call InsertLineNumberColor(v:insertmode)
+"au InsertChange * call InsertLineNumberColor(v:insertmode)
+"au InsertLeave  * hi LineNr ctermbg=darkgray
+
 
 "set up tabs
 set tabstop=4
@@ -319,7 +310,7 @@ map k gk
 map j gj
 
 "makes ; do what : does
-nnoremap ; :
+"nnoremap ; :
 
 "write files when loose focus
 au FocusLost * :wa
@@ -342,7 +333,7 @@ au BufNewFile,BufRead *.php map <F6> <Esc>:EnablePHPFolds<Cr>
 au BufNewFile,BufRead *.php map <F7> <Esc>:DisablePHPFolds<Cr>
 
 "For Python programing auto stuffs
-au BufNewFile,BufRead *.py set foldnestmax=2
+au BufNewFile,BufRead *.py set foldnestmax=1
 au BufNewFile,BufRead *.py set foldmethod=indent
 
 "Markdown auto stuffs
@@ -400,7 +391,7 @@ endfunction
 command! -complete=shellcmd -nargs=* -bang Shell call s:ExecuteInShell(<q-args>, '<bang>')
 cabbrev shell Shell
 
-function! MyCalc(str)
+function! Calc(str)
   if exists("g:MyCalcRounding")
     return system("echo 'x=" . a:str . ";d=.5/10^" . g:MyCalcPresition
           \. ";if (x<0) d=-d; x+=d; scale=" . g:MyCalcPresition . ";print x/1' | bc -l")
@@ -414,19 +405,60 @@ let g:MyCalcPresition = 2
 " Comment this if you don't want rounding
 let g:MyCalcRounding = 1
 " Use \C to replace the current line of math expression(s) by the value of the computation:
-map <silent> <Leader>= :s/.*/\=MyCalc(submatch(0))/<CR>:noh<CR>
+map <silent> <Leader>= :s/.*/\=Calc(submatch(0))/<CR>:noh<CR>
 " Same for a visual selection block
-vmap <silent> <Leader>= :B s/.*/\=MyCalc(submatch(0))/<CR>:noh<CR>
+vmap <silent> <Leader>= :B s/.*/\=Calc(submatch(0))/<CR>:noh<CR>
 " With \C= don't replace, but add the result at the end of the current line
-map <silent> <Leader>=c :s/.*/\=submatch(0) . " = " . MyCalc(submatch(0))/<CR>:noh<CR>
+map <silent> <Leader>=c :s/.*/\=submatch(0) . " = " . Calc(submatch(0))/<CR>:noh<CR>
 " Same for a visual selection block
-vmap <silent> <Leader>=c :B s/.*/\=submatch(0) . " = " . MyCalc(submatch(0))/<CR>:noh<CR>
-" Try: :B s/.*/\=MyCalc("1000 - " . submatch(0))/
+vmap <silent> <Leader>=c :B s/.*/\=submatch(0) . " = " . Calc(submatch(0))/<CR>:noh<CR>
+" Try: :B s/.*/\=Calc("1000 - " . submatch(0))/
 " The concatenation is important, since otherwise it will try
 " to evaluate things like in ":echo 1000 - ' 1748.24'"
-vmap <Leader>=+ :B s/.*/\=MyCalc(' +' . submatch(0))/<C-Left><C-Left><C-Left><Left>
-vmap <Leader>=- :B s/.*/\=MyCalc(' -' . submatch(0))/<C-Left><C-Left><C-Left><Left>
+vmap <Leader>=+ :B s/.*/\=Calc(' +' . submatch(0))/<C-Left><C-Left><C-Left><Left>
+vmap <Leader>=- :B s/.*/\=Calc(' -' . submatch(0))/<C-Left><C-Left><C-Left><Left>
 " With \Cs you add a block of expressions, whose result appears in the command line
-vmap <silent> <Leader>=t y:echo MyCalc(substitute(@0," *\n","+","g"))<CR>:silent :noh<CR>
-" Try: :MyCalc 12.7 + sqrt(98)
-command! -nargs=+ MyCalc :echo MyCalc("<args>")
+vmap <silent> <Leader>=t y:echo Calc(substitute(@0," *\n","+","g"))<CR>:silent :noh<CR>
+" Try: :Calc 12.7 + sqrt(98)
+command! -nargs=+ Calc :echo Calc("<args>")
+
+"""""""""""""""""""""""""""""""""""""
+"new stuff
+"""""""""""""""""""""""""""""""""""""
+"Strip the newline from the end of a string
+function! Chomp(str)
+	return substitute(a:str, '\n$', '', '')
+endfunction
+
+"Find a file and pass it to cmd
+function! DmenuOpen(cmd)
+	let fname = Chomp(system("find . | dmenu -i -l 20 -p " . a:cmd))
+	if empty(fname)
+		return
+	endif
+	execute a:cmd . " " . fname
+endfunction
+
+map <c-t> :call DmenuOpen('tabe')<cr>
+map <c-f> :call DmenuOpen('e')<cr>
+
+"Python folding
+"set nofoldenable
+
+"ctrlp
+"let g:ctrlp_max_height = 30
+"set wildignore+=*.pyc
+"set wildignore+=*_build/*
+"set wildignore+=*/coverage/*
+
+"python-mode
+"map <leader>g :call RopeGotoDefinition()<cr>
+"let ropevim_enable_shortcutes = 1
+"let g:pymode_rope_goto_def_newwin = 'vnew'
+"let g:pymode_rope_extended_complete = 1
+"let g:pymode_breakpoint = 0
+"let g:pymode_syntax = 1
+"let g:pymode_syntax_builtin_objs = 1
+"let g:pymode_syntax_builtin_funcs = 1
+
+"map <leader>b Oimport ipdb; ipdb.set_trace() # BREAKPOINT<C-c>
