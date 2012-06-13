@@ -251,7 +251,10 @@ map <silent> <leader>wm :VimroomToggle<CR>:set wrap<CR>:set lbr<CR>:set spell<CR
 map <silent> <leader>wo :VimroomToggle<CR>:set nospell<CR>:set relativenumber<CR>>:set linespace=0<CR>:set guifont=monaco\ 10<CR>:set showbreak=…<CR>
 
 "commenting
-map <C-c> <leader>c<space>
+map <C-c>c <leader>cc
+map <C-c>$ <leader>c$
+map <C-c>A <leader>cA
+map <C-c>y <leader>cyp
 
 "open file under cursor in a new tab
 map <C-o> <C-w>gf
