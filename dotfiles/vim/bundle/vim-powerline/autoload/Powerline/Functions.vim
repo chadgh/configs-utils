@@ -57,28 +57,28 @@ function! Powerline#Functions#GetMode() " {{{
 	if mode =~# '\v(v|V|)'
 		" Visual mode
 		if mode ==# 'v'
-			let mode = 'VISUAL'
+			let mode = 'V'
 		elseif mode ==# 'V'
-			let mode = 'V·LINE'
+			let mode = 'V'
 		elseif mode ==# ''
-			let mode = 'V·BLOCK'
+			let mode = 'V'
 		endif
 	elseif mode =~# '\v(s|S|)'
 		" Select mode
 		if mode ==# 's'
-			let mode = 'SELECT'
+			let mode = 'S'
 		elseif mode ==# 'S'
-			let mode = 'S·LINE'
+			let mode = 'S'
 		elseif mode ==# ''
-			let mode = 'S·BLOCK'
+			let mode = 'S'
 		endif
 	elseif mode =~# '\vi'
-		let mode = 'INSERT' " Insert mode
+		let mode = 'I' " Insert mode
 	elseif mode =~# '\v(R|Rv)'
-		let mode = 'REPLACE' " Replace mode
+		let mode = 'R' " Replace mode
 	else
 		" Fallback to normal mode
-		let mode = ' N ' " Normal (current)
+		let mode = 'N' " Normal (current)
 	endif
 
 	return mode

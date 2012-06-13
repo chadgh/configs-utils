@@ -5,7 +5,11 @@ let g:snips_author = 'Chad G. Hansen (chadgh)'
 "Filetype stuff
 filetype off
 call pathogen#runtime_append_all_bundles()
+call pathogen#helptags()
 filetype plugin indent on
+
+"syntax highlighting - yes please
+syntax on
 
 "not compatible with vi
 set nocompatible
@@ -17,33 +21,11 @@ autocmd VimEnter * set vb t_vb=
 "I don't use modelines, so shut them off
 set modelines=0
 
-"from scott's
-"set laststatus=2
-"set statusline=%F%m%r%h%w\ [TYPE=%Y\ %{&ff}]\ [%l/%L\ (%p%%)]
-""Insert/Replace Context-specific coloring
-"highlight LineNr term=none cterm=NONE ctermfg=117 ctermbg=darkgray gui=NONE guifg=DarkGrey guibg=NONE
-"function! InsertLineNumberColor(mode)
-"	if a:mode == 'i'
-"		hi LineNr ctermbg=22 
-"	elseif a:mode == 'r'
-"		hi LineNr ctermbg=52
-"	else
-"		hi LineNr ctermbg=red
-"	endif
-"endfunction
-"au InsertEnter  * call InsertLineNumberColor(v:insertmode)
-"au InsertChange * call InsertLineNumberColor(v:insertmode)
-"au InsertLeave  * hi LineNr ctermbg=darkgray
-
-
 "set up tabs
 set tabstop=4
 set shiftwidth=4
 set softtabstop=4
-set noexpandtab "keep as tabs - not spaces
-
-"syntax highlighting - yes please
-syntax on
+set noexpandtab "keep as tabs - not spaces | tabs rule, spaces drool!
 
 "use utf-8 for encoding
 set encoding=utf-8
@@ -71,35 +53,36 @@ set ttyfast
 
 "some helper functions
 function! OnProduction()
-	if ((match(hostname(), 'web2') >= 0) || (match(hostname(), 'web5') >= 0) || (match(hostname(), 'web9') >= 0))
+	if ((match(hostname(), 'web2') >= 0) || (match(hostname(), 'web52') >= 0) || (match(hostname(), 'web9') >= 0))
 		return 1
 	else
 		return 0
 	endif
 endfunction
 
-function! GetHostName()
-	let hostname = hostname() . ': '
-	if (match(hostname(), 'ds1-1') >= 0) " development
-		let hostname = 'dev: '
-	elseif (OnProduction() == 1) " production
-		let hostname = '***PRODUCTION***' . hostname() . ': '
-	endif
-	return hostname
-endfunction
+"function! GetHostName()
+	"let hostname = hostname() . ': '
+	"if (match(hostname(), 'ds1-1') >= 0) " development
+		"let hostname = 'dev: '
+	"elseif (OnProduction() == 1) " production
+		"let hostname = '***PRODUCTION***' . hostname() . ': '
+	"endif
+	"return hostname
+"endfunction
 
 "status bar options and customization
 "set showcmd "shows that command executed
 set laststatus=2						"Always show a status line
-set statusline=\ %{GetHostName()}			"Hostname
-set statusline+=%f\ 						"filename with full path
-set statusline+=%r						"read-only?
-if exists("+fugitive")
-	set statusline+=%{fugitive#statusline()}
-endif
-set statusline+=%=						"right align the rest
-set statusline+=%l/%L\ \ 				"line # out of total, two spaces
-set statusline+=%P\ 						"percentage of file
+"old status line stuff - replaced by powerline plugin
+"set statusline=\ %{GetHostName()}			"Hostname
+"set statusline+=%f\ 						"filename with full path
+"set statusline+=%r						"read-only?
+"if exists("+fugitive")
+	"set statusline+=%{fugitive#statusline()}
+"endif
+"set statusline+=%=						"right align the rest
+"set statusline+=%l/%L\ \ 				"line # out of total, two spaces
+"set statusline+=%P\ 						"percentage of file
 
 "turns on the cursorline by default
 set cursorline
@@ -208,23 +191,18 @@ let g:buffergator_viewport_split_policy='L'
 let g:buffergator_autoexpand_on_split=0
 
 
-"fix escape - if I hit <F1> it acts like an <ESC> press
-inoremap <F1> <ESC>
-nnoremap <F1> <ESC>
-vnoremap <F1> <ESC>
+"escape for insert mode
 inoremap jj <ESC>
 
 """""""" some helpful abbreviations
 "displays the current date
 iab <expr> dts strftime("%m/%d/%y")
-iab <expr> Ymd strftime("%Y-%m-%d")
+iab <expr> ymd strftime("%Y-%m-%d")
 
 """"""" custom commands
 "leader(<space>,b,c,e,ft,l,n,r,s,ve,vs,w,wm,wo)
 "clear highlights for a search
 nnoremap <silent> <leader><space> :noh<CR>
-"buffer mappings [buffer]
-"map <leader>b :bn<CR>
 "toggle cursor line [cursor]
 map <leader>c :set cursorline!<CR>
 " execute current file [execute]
@@ -245,10 +223,6 @@ nmap <silent> <leader>ve :tabe $MYVIMRC<CR>
 nmap <silent> <leader>vs :source ~/.vimrc<CR>
 "toggle line wrapping [wrap]
 map <leader>w :set wrap!<CR>
-" setup for writing mode - wrap, lbr, spelling, no line numbers, bigger line height and bigger font [writing mode]
-map <silent> <leader>wm :VimroomToggle<CR>:set wrap<CR>:set lbr<CR>:set spell<CR>:set nonumber<CR>:set linespace=2<CR>:set norelativenumber<CR>:set guifont=monaco\ 15<CR>:set showbreak=<CR>
-"turn off writing mode [writing off]
-map <silent> <leader>wo :VimroomToggle<CR>:set nospell<CR>:set relativenumber<CR>>:set linespace=0<CR>:set guifont=monaco\ 10<CR>:set showbreak=…<CR>
 
 "commenting
 map <C-c>c <leader>cc
@@ -291,29 +265,11 @@ map <C-b> :BuffergatorToggle<CR>
 "toggle nerd tree
 map <C-n> :NERDTreeToggle<CR>
 "save session
-"map <C-m> :mksession! ~/.vimsession<CR>
 map <C-s> :mks! ~/.vimsession<CR>
 
-"folds
-"remove all folds
-map <C-z> :set foldmethod=manual<CR>zE
-"python folds
-map <C-p> :set foldmethod=indent<CR>
-"disabled arrow keys
-"nnoremap <up> <nop>
-"nnoremap <down> <nop>
-"nnoremap <left> <nop>
-"nnoremap <right> <nop>
-"inoremap <up> <nop>
-"inoremap <down> <nop>
-"inoremap <left> <nop>
-"inoremap <right> <nop>
 "navigation works on visual lines
 map k gk
 map j gj
-
-"makes ; do what : does
-"nnoremap ; :
 
 "write files when loose focus
 au FocusLost * :wa
@@ -334,10 +290,6 @@ source ~/.vim/bundle/phpfolding/phpfolding.vim
 au BufNewFile,BufRead *.php map <F5> <Esc>:EnableFastPHPFolds<Cr>
 au BufNewFile,BufRead *.php map <F6> <Esc>:EnablePHPFolds<Cr>
 au BufNewFile,BufRead *.php map <F7> <Esc>:DisablePHPFolds<Cr>
-
-"For Python programing auto stuffs
-au BufNewFile,BufRead *.py set foldnestmax=1
-au BufNewFile,BufRead *.py set foldmethod=indent
 
 "Markdown auto stuffs
 "treat .text, README, and .md files as mkd files
@@ -363,12 +315,6 @@ cabbrev W w
 cabbrev Q q
 cabbrev E e
 cabbrev Tabe tabe
-
-"plugin settings
-"Vimroom
-let g:vimroom_background = "DarkGray"
-let g:vimroom_sidebar_height = 0
-let g:vimroom_scrolloff = 3
 
 "custom functions
 let s:_ = ''
@@ -445,8 +391,8 @@ endfunction
 map <c-t> :call DmenuOpen('tabe')<cr>
 map <c-f> :call DmenuOpen('e')<cr>
 
-"Python folding
-"set nofoldenable
+"Python
+set nofoldenable
 
 "ctrlp
 "let g:ctrlp_max_height = 30
@@ -455,13 +401,10 @@ map <c-f> :call DmenuOpen('e')<cr>
 "set wildignore+=*/coverage/*
 
 "python-mode
-"map <leader>g :call RopeGotoDefinition()<cr>
-"let ropevim_enable_shortcutes = 1
-"let g:pymode_rope_goto_def_newwin = 'vnew'
-"let g:pymode_rope_extended_complete = 1
-"let g:pymode_breakpoint = 0
-"let g:pymode_syntax = 1
-"let g:pymode_syntax_builtin_objs = 1
-"let g:pymode_syntax_builtin_funcs = 1
+map <leader>g :call RopeGotoDefinition()<cr>
+let g:pymode_lint_write = 0
+let g:pymode_folding = 0
+let g:pymode_rope = 0
+let g:pymode_breakpoint = 0
+let g:pymode_syntax_print_as_function = 0
 
-"map <leader>b Oimport ipdb; ipdb.set_trace() # BREAKPOINT<C-c>
