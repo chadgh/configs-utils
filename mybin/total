@@ -3,4 +3,4 @@ import sys
 total = 0
 for line in sys.stdin:
 	total += float(line.strip())
-print total
+print(total)
