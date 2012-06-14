@@ -391,6 +391,9 @@ endfunction
 map <c-t> :call DmenuOpen('tabe')<cr>
 map <c-f> :call DmenuOpen('e')<cr>
 
+map #Id mao lb"zdwPlbjlbdw"zP<C-V><C-A>lb<Esc>0dw"iy$ddk`a
+map #ID mao lb"zdwPlbjlbdw"zP<C-V><C-X>lb<Esc>0dw"iy$ddk`a
+
 "Python
 set nofoldenable
 
