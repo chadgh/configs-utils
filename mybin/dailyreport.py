@@ -5,13 +5,14 @@ from commandline import local, getArgParser
 parser = getArgParser(__file__.split('/')[-1], 'Sends daily report.')
 parser.add_argument('-d', '--duration', default=10, dest='duration', help="indicate the amount of time to go back.")
 parser.add_argument('-u', '--unit', default='h', dest='unit', help="indicates the unit of measurement to be used [m,h,d,w]")
+parser.add_argument('-e', '--email', default='chadgh@gmail.com', dest='email', help="email address the report should be sent to.")
 
 args = parser.parse_args(sys.argv[1:])
 
 selfstat = local["/usr/bin/selfstats.py"]
 mail = local["/usr/bin/mail"]
 
-cmd = selfstat["-b", args.duration, args.unit, "--ratios", "--periods", "--active", "--pactive"] | mail['-s', 'Daily Stats', "chadgh@gmail.com"]
+cmd = selfstat["-b", args.duration, args.unit, "--ratios", "--periods", "--active", "--pactive"] | mail['-s', 'Daily Stats', args.email]
 
 if args.verbose or args.test:
     print(cmd)

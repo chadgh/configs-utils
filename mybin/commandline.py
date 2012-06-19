@@ -2,8 +2,10 @@
 import sys
 import argparse
 
-from plumbum import local
+from plumbum import local, FG, BG
 local = local
+FG = FG
+BG = BG
 
 def getArgParser(program=__file__, desc=''):
     """Generates a default argparser for command line python scripts."""
