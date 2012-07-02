@@ -12,7 +12,7 @@ elif sys.argv[1] == '+':
 	date = time.strftime("%m-%y")
 	file = "%s.text" % (date)
 	fileName = os.path.expanduser("~/Dropbox/life/logs/journal/" + file)
-	open(fileName, "a").write("* " + " ".join(sys.argv[2:]))
+	open(fileName, "a").write("* " + " ".join(sys.argv[2:]) + "\n")
 else:
 	file = "%s.text" % (sys.argv[1])
 	fileName = os.path.expanduser("~/Dropbox/life/logs/journal/" + file)

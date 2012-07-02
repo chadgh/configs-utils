@@ -1,0 +1,22 @@
+#!/usr/bin/python
+import fractions
+import decimal
+import sys
+
+if len(sys.argv) < 2:
+	print('Usage: frac [n d | decimal]')
+	sys.exit(1)
+
+args = sys.argv[1:]
+
+f = None
+if len(args) == 1:
+	# decimal
+	d = decimal.Decimal(args[0])
+	f = fractions.Fraction.from_decimal(d)
+elif len(args) == 2:
+    # numerator and denominator
+	f = fractions.Fraction(int(args[0]), int(args[1]))
+
+if f:
+	print('%s' % (f))
