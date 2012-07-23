@@ -1,2 +1,2 @@
 #!/bin/bash
-ps -ef | grep --color=auto $1
+ps -ef | grep --color=auto $1 | head -n 1

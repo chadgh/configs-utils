@@ -394,20 +394,9 @@ map <c-f> :call DmenuOpen('e')<cr>
 map #Id mao lb"zdwPlbjlbdw"zP<C-V><C-A>lb<Esc>0dw"iy$ddk`a
 map #ID mao lb"zdwPlbjlbdw"zP<C-V><C-X>lb<Esc>0dw"iy$ddk`a
 
-"Python
-set nofoldenable
-
 "ctrlp
 "let g:ctrlp_max_height = 30
 "set wildignore+=*.pyc
 "set wildignore+=*_build/*
 "set wildignore+=*/coverage/*
-
-"python-mode
-map <leader>g :call RopeGotoDefinition()<cr>
-let g:pymode_lint_write = 0
-let g:pymode_folding = 0
-let g:pymode_rope = 0
-let g:pymode_breakpoint = 0
-let g:pymode_syntax_print_as_function = 0
 

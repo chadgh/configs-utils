@@ -15,4 +15,5 @@ if args.verbose or args.test:
 if not args.test:
     firefox & BG
     chrome & BG
+    chrome['--app=http://chadgh.com/timer'] & BG
     pidgin & BG

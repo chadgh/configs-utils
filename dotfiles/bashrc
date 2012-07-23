@@ -86,7 +86,13 @@ alias gitci='git ci -a -m'
 alias suin='sudo apt-get install'
 alias aptsearch='apt-cache search'
 
+alias nvpy='python2 ~/Dropbox/nvpy/nvpy &'
+
+#alias writework='grep -rE "state:\s*working" *.text | awk -F: "{print $1}" | xargs'
+alias writework="vim `grep -rE 'state:\s*working' ~/Dropbox/projects/short-stories/30Days/*.text | awk -F: '{print \$1}' | xargs`"
+
 #helpful helps
+alias timer="chromium --app=http://chadgh.com/timer"
 alias pacmaninstalled="pacman -Qi | awk '/^Name/ {pkg=$3} /Size/ {print $4$5,pkg}' | sort -n"
 alias mplayergl='mplayer -vo gl'
 alias whoisthere="who | awk \"{print \$1}\" | sort | uniq"
@@ -115,6 +121,12 @@ remind(){
 later(){
 	command=(${@:2:$#})
 	echo "${command[@]}" | at $1
+}
+
+function server() {
+	local port="${1:-8000}"
+	chromium "http://localhost:${port}/"
+	python -m http.server "$port"
 }
 
 #fun/random
