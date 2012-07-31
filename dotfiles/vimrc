@@ -198,6 +198,8 @@ inoremap jj <ESC>
 "displays the current date
 iab <expr> dts strftime("%m/%d/%y")
 iab <expr> ymd strftime("%Y-%m-%d")
+iab <expr> ymdt strftime("%Y-%m-%d %H:%M")
+iab <expr> wc system("wc -w " . shellescape(expand('%')))
 
 """"""" custom commands
 "leader(<space>,b,c,e,ft,l,n,r,s,ve,vs,w,wm,wo)
