@@ -1,0 +1,36 @@
+#!/usr/bin/python
+import sys
+import datetime
+import os
+import os.path
+import subprocess
+from commandline import local, getArgParser, BG
+
+def _mkdate(datestr):
+	return datetime.datetime.strptime(datestr, '%Y-%m-%d')
+
+parser = getArgParser(__file__.split('/')[-1], '')
+parser.add_argument('slug', nargs='?', help='optional slug for the dated filename. ex. ##_[slug].text')
+parser.add_argument('-d', '--date', type=_mkdate, default=datetime.datetime.now(), help='date information that will indicate which file to open for editing.')
+args = parser.parse_args(sys.argv[1:])
+
+date = args.date
+day = str(date.day)
+year = str(date.year)
+month = date.strftime("%B").lower()
+if len(str(date.day)) == 1:
+	day = '0' + date.day
+
+slug = 'writing' if args.slug is None else args.slug
+
+base_filename = '/home/chadgh/Dropbox/projects/writing'
+file_extention = '_'+slug+'.text'
+path = os.path.join(base_filename, year, month)
+filename = os.path.join(path, day + file_extention)
+
+if not os.path.exists(path):
+	os.makedirs(path)
+
+subprocess.call(['gvim', filename])
+
+print('done')

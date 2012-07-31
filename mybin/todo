@@ -33,6 +33,10 @@ parser.add_argument('-rp', '--remove-priority', dest='items_for_priority_0', def
 
 args = parser.parse_args()
 todoFile = os.path.expanduser(todoFile if args.todo_file == '' else args.todo_file)
+
+if args.open_with != '':
+	subprocess.call([args.open_with, todoFile])
+
 file = open(todoFile, "r")
 todoList = file.read()
 file.close()
@@ -79,9 +83,6 @@ elif len(args.tag_search_terms) > 0:
 	if results == '':
 		results = "No items found."
 	print results.strip()
-
-elif args.open_with != '':
-	subprocess.call([args.open_with, todoFile])
 
 elif len(args.item_to_add) > 0:
 	appendText = " ".join(args.item_to_add)
