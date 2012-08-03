@@ -1,0 +1,25 @@
+#!/usr/bin/python
+import sys
+import os
+from commandline import local, getArgParser, BG
+
+parser = getArgParser(__file__.split('/')[-1], '')
+parser.add_argument('filename', nargs='?', default='todo', help='filename of the todo list to operate on.')
+parser.add_argument('-a', '--append', help='date information that will indicate which file to open for editing.')
+parser.add_argument('-d', '--directory', default='~/Dropbox/todolists', help='date information that will indicate which file to open for editing.')
+args = parser.parse_args(sys.argv[1:])
+
+gvim = local["/usr/bin/gvim"]
+
+filename = os.path.join(os.path.expanduser(args.directory), args.filename+'.list')
+
+if (args.verbose or args.test) and args.append == None:
+	print(gvim[filename])
+elif args.verbose or args.test: # append
+	print('append ' + args.append + ' to ' + filename)
+
+if not args.test and args.append == None:
+	gvim[filename] & BG
+elif not args.test: # append
+	with open(filename, 'a') as thefile:
+		thefile.write('\n* '+args.append)
