@@ -12,14 +12,18 @@ def _mkdate(datestr):
 parser = getArgParser(__file__.split('/')[-1], '')
 parser.add_argument('slug', nargs='?', help='optional slug for the dated filename. ex. ##_[slug].text')
 parser.add_argument('-d', '--date', type=_mkdate, default=datetime.datetime.now(), help='date information that will indicate which file to open for editing.')
+parser.add_argument('-c', '--count', action='store_true', default=False, help='print the word count for the file.')
 args = parser.parse_args(sys.argv[1:])
+
+if args.count:
+	wc = local["/usr/bin/wc"]
 
 date = args.date
 day = str(date.day)
 year = str(date.year)
 month = date.strftime("%B").lower()
 if len(str(date.day)) == 1:
-	day = '0' + date.day
+	day = '0' + str(date.day)
 
 slug = 'writing' if args.slug is None else args.slug
 
@@ -31,6 +35,9 @@ filename = os.path.join(path, day + file_extention)
 if not os.path.exists(path):
 	os.makedirs(path)
 
-subprocess.call(['gvim', filename])
-
-print('done')
+if args.count:
+	results = wc['-w', filename]().strip().split()
+	results[0] = "\033[33;1m" + results[0] + "\033[0m"
+	print(" - ".join(results))
+else:
+	subprocess.call(['gvim', filename])

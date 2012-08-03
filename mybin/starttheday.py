@@ -18,5 +18,6 @@ if not args.test:
 	chrome & BG
 	chrome['--app=http://chadgh.com/timer'] & BG
 	pidgin & BG
-	todo['-o', 'gvim'] & BG
-	todo['-f', '/home/chadgh/Dropbox/worktodo.text', '-o', 'gvim'] & BG
+	#todo['-o', 'gvim'] & BG
+	todo['-f', '/home/chadgh/Dropbox/todolists/todo.list', '-o', 'gvim'] & BG
+	todo['-f', '/home/chadgh/Dropbox/todolists/work.list', '-o', 'gvim'] & BG

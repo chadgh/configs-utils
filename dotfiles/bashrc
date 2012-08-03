@@ -16,7 +16,6 @@ if [ -n "$force_color_prompt" ]; then
     fi
 fi
 
-
 # git prompt
 source $HOME/configs-utils/bin/git-completion.bash
 # bash completion
@@ -31,7 +30,16 @@ source /usr/share/bash-completion/bash_completion
 if [ "$color_prompt" = yes ];
 then
 	#PS1='\[\e]0;local\a\]\[\033[00;01;33m\]★ \[\033[00;35m\]\w \[\033[01;30m\]$(__git_ps1 "(%s) ")\[\033[01;33m\]➜ \[\033[0m\]'
-	PS1='\n\[\e[32;1m\](\[\e[33;1m\]\T\[\e[32;1m\])-(\[\e[35;1m\]\w\[\e[32;1m\])\n$(__git_ps1 "(\[\e[30;1m\]%s\[\e[32;1m\])-")(\[\e[37;1m\]! \!\[\e[32;1m\])\[\e[33;1m\]➜ \[\e[0m\]'
+	PS1='\[\e[34;1m\]★ $(__git_ps1 " \[\e[0m\]\[\e[32;3m\](\[\e[30;1m\]%s\[\e[0m\]\[\e[32;3m\])")\[\e[33;1m\]➜ \[\e[0m\]'
+	print_pre_prompt()
+	{
+		TIME="$(date +%I:%M:%S)"
+		PS1R="$TIME"
+		PS1L=$PWD
+		if [[ $PS1L/ = "$HOME"/* ]]; then PS1L=\~${PS1L#$HOME}; fi
+		printf "\e[3;32m(\e[1;35m%s\e[0m\e[3;32m)\e[2;37m%$(($COLUMNS-${#PS1L}-3))s\e[m " "$PS1L" "$PS1R"
+	}
+	PROMPT_COMMAND=print_pre_prompt
 else
   	PS1='★ \w ➜ '
 fi
@@ -137,4 +145,3 @@ alias speak='espeak -v english-us -g4'
 cmdfu(){ curl "http://www.commandlinefu.com/commands/matching/$@/$(echo -n $@ | openssl base64)/plaintext"; }
 
 PATH="$HOME/configs-utils/bin:$HOME/configs-utils/mybin:$HOME/bin:$HOME/mybin:$PATH"
-CDPATH=.:~:~/Dropbox

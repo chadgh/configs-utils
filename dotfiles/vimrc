@@ -1,6 +1,7 @@
 let mapleader = ','
 
 let g:snips_author = 'Chad G. Hansen (chadgh)'
+let g:vimlist_dir = '~/Dropbox/todolists'
 
 "Filetype stuff
 filetype off
