@@ -1,4 +1,8 @@
 export HISTCONTROL=ignoreboth
+export LC_CTYPE="en_US.UTF-8"
+export LANG="en_US"
+export LC_ALL=""
+export LC_MESSAGE="C"
 shopt -s histappend
 shopt -s checkwinsize
 export TERM="xterm-256color"
@@ -95,8 +99,6 @@ alias gitci='git ci -a -m'
 alias suin='sudo apt-get install'
 alias aptsearch='apt-cache search'
 
-alias nvpy='python2 ~/Dropbox/nvpy/nvpy &'
-
 #alias writework='grep -rE "state:\s*working" *.text | awk -F: "{print $1}" | xargs'
 alias writework="vim `grep -rE 'state:\s*working' ~/Dropbox/projects/short-stories/30Days/*.text | awk -F: '{print \$1}' | xargs`"
 
@@ -132,6 +134,10 @@ later(){
 	echo "${command[@]}" | at $1
 }
 
+pdfmerge(){
+	gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=finished.pdf $*
+}
+
 function server() {
 	local port="${1:-8000}"
 	chromium "http://localhost:${port}/"
@@ -144,4 +150,4 @@ alias motd='cat /etc/motd'
 alias speak='espeak -v english-us -g4'
 cmdfu(){ curl "http://www.commandlinefu.com/commands/matching/$@/$(echo -n $@ | openssl base64)/plaintext"; }
 
-PATH="$HOME/configs-utils/bin:$HOME/configs-utils/mybin:$HOME/bin:$HOME/mybin:$PATH"
+PATH="$HOME/configs-utils/bin:$HOME/configs-utils/mybin:$HOME/bin:$HOME/mybin:$HOME/.gem/ruby/1.9.1/bin:$PATH"

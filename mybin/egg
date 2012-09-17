@@ -1,0 +1,32 @@
+#!/usr/bin/python
+import time
+import sys
+from commandline import getArgParser
+from gi.repository import Notify as notify
+
+def displayMessage(firstBit, secondBit):
+	"""Display a message using libnotify."""
+	notify.init(firstBit)
+	message = notify.Notification.new(firstBit, secondBit, 'user-away')
+	message.show()
+
+parser = getArgParser(__file__.split('/')[-1], 'A simple command line egg timer.')
+parser.add_argument('time', nargs='?', default='5', help='how long you want the timer to run')
+parser.add_argument('unit', nargs='?', default='s', help='m for minutes, h for hours, d for days, s for seconds (default).')
+args = parser.parse_args(sys.argv[1:])
+
+duration = int(args.time)
+unit = 'second(s)'
+if args.unit == 'm':
+	duration = duration * 60
+	unit = 'minute(s)'
+elif args.unit == 'h':
+	duration = duration * 60 * 60
+	unit = 'hour(s)'
+elif args.unit == 'd':
+	duration  = duration * 60 * 60 * 24
+	unit = 'day(s)'
+
+displayMessage('Timer started.', 'Timer running for %s %s.' % (args.time, unit))
+time.sleep(float(duration))
+displayMessage('Timer finished.', 'Timer completed %s %s.' % (args.time, unit))

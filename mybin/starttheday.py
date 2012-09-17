@@ -8,7 +8,7 @@ args = parser.parse_args(sys.argv[1:])
 firefox = local["/usr/bin/firefox"]
 chrome = local["/usr/bin/chromium"]
 pidgin = local["/usr/bin/pidgin"]
-todo = local["/home/chadgh/configs-utils/mybin/todo"]
+todo = local["/home/chadgh/configs-utils/mybin/td"]
 
 if args.verbose or args.test:
 	print(firefox, chrome, pidgin, todo)
@@ -19,5 +19,5 @@ if not args.test:
 	chrome['--app=http://chadgh.com/timer'] & BG
 	pidgin & BG
 	#todo['-o', 'gvim'] & BG
-	todo['-f', '/home/chadgh/Dropbox/todolists/todo.list', '-o', 'gvim'] & BG
-	todo['-f', '/home/chadgh/Dropbox/todolists/work.list', '-o', 'gvim'] & BG
+	todo & BG
+	todo['work'] & BG

@@ -1,4 +1,4 @@
 #!/bin/bash
-curl ifconfig.me/ip;
-#curl icanhazip.com;
+#curl ifconfig.me/ip;
+curl icanhazip.com;
 #curl ip.appspot.com;
