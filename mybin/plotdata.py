@@ -1,7 +1,6 @@
 #!/usr/bin/python2
 
 import sys
-import matplotlib
 import matplotlib.pyplot as plt
 
 x = [int(x) for x in sys.argv[1].split(',')]

@@ -1,22 +1,35 @@
 let mapleader = ','
 
-"plugin settings
-let g:snips_author = 'Chad G. Hansen (chadgh)'
-
-let g:vimlist_dir = '~/Dropbox/todolists'
-let g:vimlist_autocommands = 0
-
-let g:indent_guides_start_level = 1
-let g:indent_guides_guide_size = 1
-
-"let $XIKI_DIR = "/home/chadgh/.gem/ruby/1.9.1/gems/xiki-0.6.3"
-"source /home/chadgh/.gem/ruby/1.9.1/gems/xiki-0.6.3/etc/vim/xiki.vim
-
-"Filetype stuff
+"Filetype stuff and pathogen
 filetype off
 call pathogen#runtime_append_all_bundles()
 call pathogen#helptags()
 filetype plugin indent on
+
+"plugin settings
+	" snipMate
+let g:snips_author = 'Chad G. Hansen (chadgh)'
+
+	" vimlist
+let g:vimlist_dir = '~/Dropbox/todolists'
+let g:vimlist_autocommands = 0
+"List highlighting for done and inprogress tags
+hi bcDoneLine ctermfg=234
+hi bcInProgressLine ctermfg=107
+hi bcTag ctermfg=16 
+
+let m = matchadd("bcDoneLine", "^[*-].*@done.*$")
+let m = matchadd("bcInProgressLine", "^[*-].*@inprogress.*$")
+let m = matchadd("bcTag", "@done")
+let m = matchadd("bcTag", "@inprogress")
+
+	" vim-indent-guides
+let g:indent_guides_start_level = 1
+let g:indent_guides_guide_size = 1
+
+	"Buffergator seetings
+let g:buffergator_viewport_split_policy='L'
+let g:buffergator_autoexpand_on_split=0
 
 "syntax highlighting - yes please
 syntax on
@@ -35,7 +48,7 @@ set modelines=0
 set tabstop=4
 set shiftwidth=4
 set softtabstop=4
-set noexpandtab "keep as tabs - not spaces | tabs rule, spaces drool!
+set noexpandtab "keep as tabs - not spaces | tabs rule, spaces drool! at least by default
 
 "use utf-8 for encoding
 set encoding=utf-8
@@ -44,9 +57,13 @@ set encoding=utf-8
 set scrolloff=3
 
 "indenting
-"set cindent
 set autoindent
 set smartindent
+
+" enable mouse
+set mouse=a
+
+set pastetoggle=<F2>
 
 "makes hidden buffers easier to create
 set hidden
@@ -61,38 +78,8 @@ set noequalalways
 "fast terminal connection - sends more characters at a time
 set ttyfast
 
-"some helper functions
-function! OnProduction()
-	if ((match(hostname(), 'web2') >= 0) || (match(hostname(), 'web52') >= 0) || (match(hostname(), 'web9') >= 0))
-		return 1
-	else
-		return 0
-	endif
-endfunction
-
-"function! GetHostName()
-	"let hostname = hostname() . ': '
-	"if (match(hostname(), 'ds1-1') >= 0) " development
-		"let hostname = 'dev: '
-	"elseif (OnProduction() == 1) " production
-		"let hostname = '***PRODUCTION***' . hostname() . ': '
-	"endif
-	"return hostname
-"endfunction
-
-"status bar options and customization
-"set showcmd "shows that command executed
-set laststatus=2						"Always show a status line
-"old status line stuff - replaced by powerline plugin
-"set statusline=\ %{GetHostName()}			"Hostname
-"set statusline+=%f\ 						"filename with full path
-"set statusline+=%r						"read-only?
-"if exists("+fugitive")
-	"set statusline+=%{fugitive#statusline()}
-"endif
-"set statusline+=%=						"right align the rest
-"set statusline+=%l/%L\ \ 				"line # out of total, two spaces
-"set statusline+=%P\ 						"percentage of file
+"status bar (everything else handled by powerline plugin)
+set laststatus=2 "Always show a status line
 
 "turns on the cursorline by default
 set cursorline
@@ -110,11 +97,10 @@ set wildmode=full
 "turn on status line with cursors current position
 set ruler
 
-"makes backspace work as expected
+"makes backspace work as expected for tabs and such
 set backspace=start,indent,eol
 
 "relative numbering by default
-"if has('relativenumber')
 if exists("+relativenumber")
 	set relativenumber
 else
@@ -123,12 +109,14 @@ else
 endif
 
 "keep 100 of the past commands
-set history=100
+set history=1000
 
-"location of swap files
-set dir=~/.vimswap
-"swap file is written to disk after this many milliseconds of inactivity
-set updatetime=500
+"tell vim which files to ignore always
+set wildignore=*.swp,*.bak,*.pyc
+
+"don't save swap file
+set nobackup
+set noswapfile
 
 "undo stuff
 "location of undo files
@@ -165,7 +153,6 @@ noh
 nnoremap <tab> %
 vnoremap <tab> %
 
-
 " automatically change dir to the dir that the currently working file is.
 if exists("+autochdir")
 	set autochdir
@@ -176,22 +163,23 @@ endif
 "characters to use for tabs and eol
 set listchars=tab:▸\ ,trail:܀,eol:¬,extends:>,precedes:<
 
+"Appearance
 "more colors
 set t_Co=256
 
-"Appearance
 "use different colorschemes and fonts in gui or terminal
 if has("gui_running")
 	set guioptions=aiA
 	color superman
 	"color lucius
 	set guifont=monaco\ 10
-	set lines=65 columns=100
+	set lines=65 columns=84
 else
 	"colorscheme lucius
 	colorscheme superman
 endif
 
+" color stuff for vim-list
 hi NonText ctermfg=DarkGray guifg=#363946
 hi clear SpecialKey
 hi link SpecialKey NonText
@@ -200,10 +188,6 @@ hi Folded ctermbg=237 ctermfg=74 guibg=#333333 guifg=#a2a2a2
 
 hi VimlistSubItem guifg=#454545
 hi VimlistTitle guifg=#564532
-
-"Buffergator seetings
-let g:buffergator_viewport_split_policy='L'
-let g:buffergator_autoexpand_on_split=0
 
 "escape for insert mode
 inoremap jj <ESC>
@@ -215,33 +199,31 @@ iab <expr> ymd strftime("%Y-%m-%d")
 iab <expr> ymdt strftime("%Y-%m-%d %H:%M")
 iab <expr> wc system("wc -w " . shellescape(expand('%')))
 
-""""""" custom commands
+""""""" custom commands 
 "leader(<space>,b,c,e,ft,l,n,r,s,ve,vs,w,wm,wo)
 "clear highlights for a search
 nnoremap <silent> <leader><space> :noh<CR>
 "toggle cursor line [cursor]
 map <silent> <leader>c :set cursorline!<CR>
-"fold a tag (in html, etc) [fold tag]
-map <leader>ft Vatzf
 "toggle displaying newline charaters and tabs [list]
 map <silent> <leader>l :set list!<CR>
 "toggle line numbering [number]
 map <silent> <leader>n :set number!<CR>
 "toggle relativenumbering [relativenumber]
-map <silent> <leader>r>r :set relativenumber!<CR>
+map <silent> <leader>r :set relativenumber!<CR>
 "toggle spell checking [spelling]
 nmap <silent> <leader>s :set spell!<CR>
 "open up .vimrc file for editing [vimrc edit]
-nmap <leader><leader>ve :tabe $MYVIMRC<CR>
+nmap <leader>ve :tabe $MYVIMRC<CR>
 "source vimrc [vimrc source]
-nmap <leader><leader>vs :source ~/.vimrc<CR>
+nmap <leader>vs :source ~/.vimrc<CR>
 "toggle line wrapping [wrap]
 map <leader>w :set wrap!<CR>
 
 "commenting
 map <C-c>c <leader>c<space>
 map <C-c>$ <leader>c$
-map <C-c>A <leader>cA
+map <C-c>A <leader>cA 
 map <C-c>y <leader>cyp
 
 "open file under cursor in a new tab
@@ -261,9 +243,11 @@ vmap <C-Down> ]egv
 
 "visually select the las edited pasted line
 nmap gV `[v`]
+vnoremap < <gv
+vnoremap > >gv
 
 "json view
-nmap <leader><leader>j !!python -c "import sys,json; print(json.dumps(json.loads(sys.stdin.read()), indent=4))"<CR>
+nmap <leader>j !!python -c "import sys,json; print(json.dumps(json.loads(sys.stdin.read()), indent=4))"<CR>
 
 "new tab
 map <C-t> :tabnew<CR>
@@ -300,6 +284,11 @@ au BufNewFile,BufRead *.php map <F5> <Esc>:EnableFastPHPFolds<Cr>
 au BufNewFile,BufRead *.php map <F6> <Esc>:EnablePHPFolds<Cr>
 au BufNewFile,BufRead *.php map <F7> <Esc>:DisablePHPFolds<Cr>
 
+" For Python programming
+au BufNewFile,BufRead *.py set expandtab
+au BufNewFile,BufRead *.py set colorcolumn=80
+au BufNewFile,BufRead *.py set nowrap
+
 "Markdown auto stuffs
 "treat .text, README, and .md files as mkd files
 au! BufNewFile,BufRead *.text  set filetype=mkd
@@ -324,11 +313,8 @@ au BufNewFile,BufRead *.list  normal zM
 
 au BufReadPost fugitive://* set bufhidden=delete
 
-if (OnProduction() == 1)
-	hi StatusLine	ctermbg=052		cterm=BOLD
-	hi StatusLineNC	ctermbg=052		guibg=#660000
-	hi LineNr		ctermbg=052		cterm=BOLD
-endif
+"For HTML programming
+au BufNewFile,BufRead *.html map <tab> Vatzf
 
 "commonly mis-typed commands
 cabbrev W w
@@ -336,67 +322,3 @@ cabbrev Q q
 cabbrev E e
 cabbrev Tabe tabe
 
-"custom functions
-let s:_ = ''
-
-function! s:ExecuteInShell(command, bang)
-	let _ = a:bang != '' ? s:_ : a:command == '' ? '' : join(map(split(a:command), 'expand(v:val)'))
-	let _ = substitute(_, '%', expand('%'), '')
-
-	if (_ != '')
-		let s:_ = substitute(_, '%', expand('%'), '')
-		let bufnr = bufnr('%')
-		let winnr = bufwinnr('^execution' . _ . '$')
-		silent! execute  winnr < 0 ? 'bo new execution' . fnameescape(_) : 'bo ' . winnr . 'wincmd w'
-		setlocal buftype=nowrite bufhidden=wipe nobuflisted noswapfile nowrap number nocursorline
-		"silent! :%d
-		"silent! 2d | resize 1 | redraw
-		silent! execute 'silent! %!'. _
-		silent! execute 'resize 9'
-		silent! execute 'normal! G'
-		silent! execute 'winc p'
-	endif
-endfunction
-command! -complete=shellcmd -nargs=* -bang Shell call s:ExecuteInShell(<q-args>, '<bang>')
-cabbrev shell Shell
-
-function! Calc(str)
-  if exists("g:MyCalcRounding")
-    return system("echo 'x=" . a:str . ";d=.5/10^" . g:MyCalcPresition
-          \. ";if (x<0) d=-d; x+=d; scale=" . g:MyCalcPresition . ";print x/1' | bc -l")
-  else
-    return system("echo 'scale=" . g:MyCalcPresition . " ; print " . a:str . "' | bc -l")
-  endif
-endfunction
-
-" Control the precision with this variable
-let g:MyCalcPresition = 2
-" Comment this if you don't want rounding
-let g:MyCalcRounding = 1
-" Use \C to replace the current line of math expression(s) by the value of the computation:
-map <silent> <leader>= :s/.*/\=Calc(submatch(0))/<CR>:noh<CR>
-" Same for a visual selection block
-vmap <silent> <leader>= :B s/.*/\=Calc(submatch(0))/<CR>:noh<CR>
-" With \C= don't replace, but add the result at the end of the current line
-map <silent> <leader>=c :s/.*/\=submatch(0) . " = " . Calc(submatch(0))/<CR>:noh<CR>
-" Same for a visual selection block
-vmap <silent> <leader>=c :B s/.*/\=submatch(0) . " = " . Calc(submatch(0))/<CR>:noh<CR>
-" Try: :B s/.*/\=Calc("1000 - " . submatch(0))/
-" The concatenation is important, since otherwise it will try
-" to evaluate things like in ":echo 1000 - ' 1748.24'"
-vmap <leader>=+ :B s/.*/\=Calc(' +' . submatch(0))/<C-Left><C-Left><C-Left><Left>
-vmap <leader>=- :B s/.*/\=Calc(' -' . submatch(0))/<C-Left><C-Left><C-Left><Left>
-" With \Cs you add a block of expressions, whose result appears in the command line
-vmap <silent> <leader>=t y:echo Calc(substitute(@0," *\n","+","g"))<CR>:silent :noh<CR>
-" Try: :Calc 12.7 + sqrt(98)
-command! -nargs=+ Calc :echo Calc("<args>")
-
-"List highlighting for done and inprogress tags
-hi bcDoneLine ctermfg=234
-hi bcInProgressLine ctermfg=107
-hi bcTag ctermfg=16 
-
-let m = matchadd("bcDoneLine", "^[*-].*@done.*$")
-let m = matchadd("bcInProgressLine", "^[*-].*@inprogress.*$")
-let m = matchadd("bcTag", "@done")
-let m = matchadd("bcTag", "@inprogress")

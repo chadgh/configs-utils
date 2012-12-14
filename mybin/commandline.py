@@ -1,5 +1,4 @@
 #!/usr/bin/python
-import sys
 import argparse
 
 from plumbum import local, FG, BG

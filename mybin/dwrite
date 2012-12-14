@@ -4,40 +4,62 @@ import datetime
 import os
 import os.path
 import subprocess
-from commandline import local, getArgParser, BG
+from commandline import local, getArgParser
+
 
 def _mkdate(datestr):
-	return datetime.datetime.strptime(datestr, '%Y-%m-%d')
+    return datetime.datetime.strptime(datestr, '%Y-%m-%d')
 
 parser = getArgParser(__file__.split('/')[-1], '')
-parser.add_argument('slug', nargs='?', help='optional slug for the dated filename. ex. ##_[slug].text')
-parser.add_argument('-d', '--date', type=_mkdate, default=datetime.datetime.now(), help='date information that will indicate which file to open for editing.')
-parser.add_argument('-c', '--count', action='store_true', default=False, help='print the word count for the file.')
+parser.add_argument('slug', nargs='?',
+                    help='optional slug for the dated filename. \
+                          ex. ##_[slug].text')
+parser.add_argument('-d', '--date',
+                    type=_mkdate, default=datetime.datetime.now(),
+                    help='date information that will indicate which file to \
+                          open for editing.')
+parser.add_argument('-c', '--count', action='store_true', default=False,
+                    help='print the word count for the file.')
+parser.add_argument('-m', '--month', action='store_true', default=False,
+                    help='print the word count for the writing files for the \
+                          current month.')
 args = parser.parse_args(sys.argv[1:])
 
-if args.count:
-	wc = local["/usr/bin/wc"]
+if args.count or args.month:
+    wc = local["/usr/bin/wc"]
 
 date = args.date
 day = str(date.day)
 year = str(date.year)
 month = date.strftime("%B").lower()
 if len(str(date.day)) == 1:
-	day = '0' + str(date.day)
+    day = '0' + str(date.day)
 
 slug = 'writing' if args.slug is None else args.slug
 
 base_filename = '/home/chadgh/Dropbox/projects/writing'
-file_extention = '_'+slug+'.text'
+file_extention = '_' + slug + '.text'
 path = os.path.join(base_filename, year, month)
 filename = os.path.join(path, day + file_extention)
 
 if not os.path.exists(path):
-	os.makedirs(path)
+    os.makedirs(path)
 
 if args.count:
-	results = wc['-w', filename]().strip().split()
-	results[0] = "\033[33;1m" + results[0] + "\033[0m"
-	print(" - ".join(results))
+    results = wc['-w', filename]().strip().split()
+    results[0] = "\033[34;1m" + results[0] + "\033[0m"
+    print(" - ".join(results))
+if args.month:
+    paths = local.path(path) // '*.text'
+    paths.reverse()
+    total = 0
+    for p in paths:
+        cmd = wc['-w', p]
+        results = cmd().strip().split()
+        total += int(results[0])
+        results[0] = "\033[34;1m" + results[0] + "\033[0m"
+        results[1] = results[1].split('/')[-1]
+        print(" - ".join(results))
+    print("\033[33;1m" + str(total) + "\033[0m - total")
 else:
-	subprocess.call(['gvim', filename])
+    subprocess.call(['gvim', filename])

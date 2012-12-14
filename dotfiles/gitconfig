@@ -19,3 +19,5 @@
 	ci = commit
 	b = branch
 	switch = checkout
+[push]
+	default = matching

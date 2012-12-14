@@ -1,0 +1,8 @@
+#!/bin/bash
+pip2 freeze --local | grep -v '^\-e' | cut -d = -f 1 | grep -v '^#' > /tmp/pip2_packages;
+for package in `cat /tmp/pip2_packages`; do sudo pip2 install -U $package; done
+
+echo
+echo
+echo
+echo 'Updates finished!'

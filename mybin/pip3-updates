@@ -1,0 +1,8 @@
+#!/bin/bash
+pip3 freeze --local | grep -v '^\-e' | cut -d = -f 1 | grep -v '^#' > /tmp/pip3_packages;
+for package in `cat /tmp/pip3_packages`; do sudo pip3 install -U $package; done
+
+echo
+echo
+echo
+echo 'Updates finished!'

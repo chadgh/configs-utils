@@ -95,6 +95,8 @@ alias stag1='ssh chansen4@stg1.lib.byu.edu'
 alias get='git'
 alias gitci='git ci -a -m'
 
+alias cleanpy='find . -name "*.pyc" -delete; rm -r __pycache__'
+
 #apt-get helps
 alias suin='sudo apt-get install'
 alias aptsearch='apt-cache search'
