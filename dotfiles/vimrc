@@ -10,9 +10,15 @@ filetype plugin indent on
 " snipMate
 let g:snips_author = 'Chad G. Hansen (chadgh)'
 
-	" vim-indent-guides
+" vim-indent-guides
 let g:indent_guides_start_level = 1
 let g:indent_guides_guide_size = 1
+
+" ctrlp
+let g:ctrlp_prompt_mappings = {
+	\ 'AcceptSelection("e")': ['<cr>', '<c-m>'],
+	\ 'AcceptSelection("t")': ['<tab>'],
+	\ }
 
 "syntax highlighting - yes please
 syntax on
@@ -231,17 +237,17 @@ au BufNewFile,BufRead *.py set colorcolumn=80
 au BufNewFile,BufRead *.py set nowrap
 
 "Markdown auto stuffs
-"treat .text, README, and .md files as mkd files
-au! BufNewFile,BufRead *.text  set filetype=mkd
+"treat .text, README, and .md files as markdown files
+au! BufNewFile,BufRead *.text  set filetype=markdown
 au BufNewFile,BufRead *.text  set nonumber
 au BufNewFile,BufRead *.text  set norelativenumber
 au BufNewFile,BufRead *.text  set nocursorline
 au BufNewFile,BufRead *.text  set ai formatoptions=tcroqn2 comments=n:&gt;
 
-au! BufNewFile,BufRead README  set filetype=mkd
+au! BufNewFile,BufRead README  set filetype=markdown
 au BufNewFile,BufRead README  set ai formatoptions=tcroqn2 comments=n:&gt;
 
-au! BufNewFile,BufRead *.md  set filetype=mkd
+au! BufNewFile,BufRead *.md  set filetype=markdown
 au BufNewFile,BufRead *.md  set ai formatoptions=tcroqn2 comments=n:&gt;
 
 au BufReadPost fugitive://* set bufhidden=delete
