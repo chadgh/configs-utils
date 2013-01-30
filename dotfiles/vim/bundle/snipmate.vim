@@ -1,1 +1,0 @@
-/home/chadgh/.otherpeoplesstuff/snipmate.vim
