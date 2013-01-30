@@ -10,6 +10,10 @@ filetype plugin indent on
 " snipMate
 let g:snips_author = 'Chad G. Hansen (chadgh)'
 
+	" vim-indent-guides
+let g:indent_guides_start_level = 1
+let g:indent_guides_guide_size = 1
+
 "syntax highlighting - yes please
 syntax on
 
@@ -118,6 +122,9 @@ vnoremap / /\v
 "search with one or more uppercase - search is case-sensitive
 set ignorecase
 set smartcase
+
+"makes all substitutions global - no need to add the 'g' on the end
+" set gdefault
 
 "work together to highlight and show matches as you type
 set incsearch

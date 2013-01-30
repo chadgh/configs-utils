@@ -1,0 +1,73 @@
+# The following lines were added by compinstall
+zstyle :compinstall filename '/home/chadgh/.zshrc'
+
+autoload -U compinit
+compinit -i
+# End of lines added by compinstall
+# Lines configured by zsh-newuser-install
+HISTFILE=~/.histfile
+HISTSIZE=1000
+SAVEHIST=1000
+setopt appendhistory autocd extendedglob notify
+unsetopt beep
+bindkey -v
+# End of lines configured by zsh-newuser-install
+
+bindkey '\e[3~' delete-char
+bindkey '^R' history-incremental-search-backward
+
+#tools
+for tool in `ls $HOME/.zsh/tools/`; do
+	source $HOME/.zsh/tools/$tool
+done
+
+#plugins
+for plugin in `ls $HOME/.zsh/plugins/`; do
+	source $HOME/.zsh/plugins/$plugin/$plugin.plugin.zsh
+done
+
+#load theme
+source $HOME/.zsh/themes/sorin.zsh-theme
+
+path+='/home/chadgh/mybin'
+PROJECT_HOME='/home/chadgh/projects'
+EDITOR='gvim'
+
+#aliases
+alias sz='source ~/.zshrc'
+alias ez="$EDITOR ~/.zshrc"
+alias vimv="$EDITOR ~/.vimrc"
+alias packup="packer -Syyu"
+alias up='cd ..'
+alias ll='ls -l'
+
+#vim!
+alias vmi='vim'
+alias cim='vim'
+alias bim='vim'
+alias vi='vim'
+
+#ssh aliases
+myhosts=(dev:dev stg:stg2 prod:riker las:web5 web9:web9 web3:web3 web7:web7)
+for h in $myhosts; do
+	stuff=("${(s/:/)h}")
+	key=$stuff[1] 
+	value=$stuff[2]
+	alias $key="ssh chansen4@$value.lib.byu.edu"
+done
+
+#functions
+ssh-key-sync() {
+	for h in $myhosts; do
+		stuff=("${(s/:/)h}")
+		key=$stuff[1]
+		value=$stuff[2]
+		thehost="chansen4@$value.lib.byu.edu"
+		ssh-copy-id -i ~/.ssh/id_rsa.pub $thehost
+		echo "$thehost completed"
+	done
+}
+
+lt() {
+	ls -lth --color $1 | head -n 10;
+}
