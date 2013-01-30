@@ -1,6 +1,8 @@
 [user]
 	name = chadgh
 	email = chadgh@gmail.com
+[pager]
+	diff = 
 [color]
 	diff = auto
 	status = auto
@@ -19,5 +21,7 @@
 	ci = commit
 	b = branch
 	switch = checkout
+	lol = log --abbrev-commit --graph --decorate --all
+	lolo = log --pretty=oneline --abbrev-commit --graph --decorate --all
 [push]
 	default = matching

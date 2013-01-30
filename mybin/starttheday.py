@@ -6,18 +6,14 @@ parser = getArgParser(__file__.split('/')[-1], '')
 args = parser.parse_args(sys.argv[1:])
 
 firefox = local["/usr/bin/firefox"]
-chrome = local["/usr/bin/chromium"]
+chromium = local["/usr/bin/chromium"]
 pidgin = local["/usr/bin/pidgin"]
-todo = local["/home/chadgh/configs-utils/mybin/td"]
 
 if args.verbose or args.test:
-	print(firefox, chrome, pidgin, todo)
+    print(firefox, chromium, pidgin)
 
 if not args.test:
-	firefox & BG
-	chrome & BG
-	chrome['--app=http://chadgh.com/timer'] & BG
-	pidgin & BG
-	#todo['-o', 'gvim'] & BG
-	todo & BG
-	todo['work'] & BG
+    firefox & BG
+    chromium & BG
+    chromium['--app=http://chadgh.com/timer'] & BG
+    pidgin & BG

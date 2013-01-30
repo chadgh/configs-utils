@@ -6,9 +6,30 @@ call pathogen#runtime_append_all_bundles()
 call pathogen#helptags()
 filetype plugin indent on
 
-"""""""plugin settings
-" snipMate
+"plugin settings
+	" snipMate
 let g:snips_author = 'Chad G. Hansen (chadgh)'
+
+	" vimlist
+let g:vimlist_dir = '~/Dropbox/todolists'
+let g:vimlist_autocommands = 0
+"List highlighting for done and inprogress tags
+hi bcDoneLine ctermfg=234
+hi bcInProgressLine ctermfg=107
+hi bcTag ctermfg=16 
+
+let m = matchadd("bcDoneLine", "^[*-].*@done.*$")
+let m = matchadd("bcInProgressLine", "^[*-].*@inprogress.*$")
+let m = matchadd("bcTag", "@done")
+let m = matchadd("bcTag", "@inprogress")
+
+	" vim-indent-guides
+let g:indent_guides_start_level = 1
+let g:indent_guides_guide_size = 1
+
+	"Buffergator seetings
+let g:buffergator_viewport_split_policy='L'
+let g:buffergator_autoexpand_on_split=0
 
 "syntax highlighting - yes please
 syntax on
@@ -61,9 +82,9 @@ set ttyfast
 set laststatus=2 "Always show a status line
 
 "turns on the cursorline by default
-" ? set cursorline
+set cursorline
 "turn wrapping on by default
-" ? set wrap
+set wrap
 "turn on nice line breaking
 set lbr
 "use ellipsis to indicate a line break
@@ -119,6 +140,9 @@ vnoremap / /\v
 set ignorecase
 set smartcase
 
+"makes all substitutions global - no need to add the 'g' on the end
+set gdefault
+
 "work together to highlight and show matches as you type
 set incsearch
 set showmatch
@@ -126,8 +150,8 @@ set hlsearch
 noh
 
 "make hitting tab go to the matching bracket
-" ? nnoremap <tab> %
-" ? vnoremap <tab> %
+nnoremap <tab> %
+vnoremap <tab> %
 
 " automatically change dir to the dir that the currently working file is.
 if exists("+autochdir")
@@ -146,31 +170,37 @@ set t_Co=256
 "use different colorschemes and fonts in gui or terminal
 if has("gui_running")
 	set guioptions=aiA
-	" color superman
-	color lucius
+	color superman
+	"color lucius
 	set guifont=monaco\ 10
 	set lines=65 columns=84
 else
-	colorscheme lucius
-	" colorscheme superman
+	"colorscheme lucius
+	colorscheme superman
 endif
 
+" color stuff for vim-list
+hi NonText ctermfg=DarkGray guifg=#363946
+hi clear SpecialKey
+hi link SpecialKey NonText
+
+hi Folded ctermbg=237 ctermfg=74 guibg=#333333 guifg=#a2a2a2
+
+hi VimlistSubItem guifg=#454545
+hi VimlistTitle guifg=#564532
+
 "escape for insert mode
-" ? inoremap jj <ESC>
+inoremap jj <ESC>
 
 """""""" some helpful abbreviations
+"displays the current date
 iab <expr> dts strftime("%m/%d/%y")
 iab <expr> ymd strftime("%Y-%m-%d")
 iab <expr> ymdt strftime("%Y-%m-%d %H:%M")
 iab <expr> wc system("wc -w " . shellescape(expand('%')))
 
-"commonly mis-typed commands
-cabbrev W w
-cabbrev Q q
-cabbrev E e
-cabbrev Tabe tabe
-
 """"""" custom commands 
+"leader(<space>,b,c,e,ft,l,n,r,s,ve,vs,w,wm,wo)
 "clear highlights for a search
 nnoremap <silent> <leader><space> :noh<CR>
 "toggle cursor line [cursor]
@@ -183,8 +213,18 @@ map <silent> <leader>n :set number!<CR>
 map <silent> <leader>r :set relativenumber!<CR>
 "toggle spell checking [spelling]
 nmap <silent> <leader>s :set spell!<CR>
+"open up .vimrc file for editing [vimrc edit]
+nmap <leader>ve :tabe $MYVIMRC<CR>
+"source vimrc [vimrc source]
+nmap <leader>vs :source ~/.vimrc<CR>
 "toggle line wrapping [wrap]
 map <leader>w :set wrap!<CR>
+
+"commenting
+map <C-c>c <leader>c<space>
+map <C-c>$ <leader>c$
+map <C-c>A <leader>cA 
+map <C-c>y <leader>cyp
 
 "open file under cursor in a new tab
 map <C-o> <C-w>gf
@@ -195,20 +235,42 @@ nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 
+"text bubbling
+nmap <C-Up> [e
+nmap <C-Down> ]e
+vmap <C-Up> [egv
+vmap <C-Down> ]egv
+
 "visually select the las edited pasted line
 nmap gV `[v`]
 vnoremap < <gv
 vnoremap > >gv
+
+"json view
+nmap <leader>j !!python -c "import sys,json; print(json.dumps(json.loads(sys.stdin.read()), indent=4))"<CR>
+
+"new tab
+map <C-t> :tabnew<CR>
+
+"buffergator
+map <C-b> :BuffergatorToggle<CR>
+
+"toggle nerd tree
+map <C-n> :NERDTreeToggle<CR>
+"save session
+map <C-s> :mks! ~/.vimsession<CR>
 
 "navigation works on visual lines
 map k gk
 map j gj
 
 "write files when loose focus
-" ? au FocusLost * :wa
+au FocusLost * :wa
 
 "For PHP programming auto stuffs
 au! BufNewFile,BufRead *.php set filetype=php.html.javascript.css.sql
+au BufNewFile,BufRead *.php set makeprg=php\ -l\ %
+au BufNewFile,BufRead *.php set errorformat=%m\ in\ %f\ on\ line\ %l
 au BufNewFile,BufRead *.php let php_htmlInStrings=1
 au BufNewFile,BufRead *.php let php_sql_query=1
 au BufNewFile,BufRead *.php set foldmethod=manual
@@ -216,7 +278,11 @@ au BufNewFile,BufRead *.php let g:DisableAutoPHPFolding=1
 au BufNewFile,BufRead *.php set comments=sr:/*,mb:*,ex:*/
 au BufNewFile,BufRead *.php set fo+=ro
 au BufNewFile,BufRead *.php let php_folding=0
+"let php_folding=0
+source ~/.vim/bundle/phpfolding/phpfolding.vim
 au BufNewFile,BufRead *.php map <F5> <Esc>:EnableFastPHPFolds<Cr>
+au BufNewFile,BufRead *.php map <F6> <Esc>:EnablePHPFolds<Cr>
+au BufNewFile,BufRead *.php map <F7> <Esc>:DisablePHPFolds<Cr>
 
 " For Python programming
 au BufNewFile,BufRead *.py set expandtab
@@ -237,7 +303,22 @@ au BufNewFile,BufRead README  set ai formatoptions=tcroqn2 comments=n:&gt;
 au! BufNewFile,BufRead *.md  set filetype=mkd
 au BufNewFile,BufRead *.md  set ai formatoptions=tcroqn2 comments=n:&gt;
 
+au! BufNewFile,BufRead *.list  set filetype=list
+au BufNewFile,BufRead *.list   set ai formatoptions=cro comments=b:*
+au BufNewFile,BufRead *.list  set nonumber
+au BufNewFile,BufRead *.list  set norelativenumber
+au BufNewFile,BufRead *.list  set nocursorline
+au BufNewFile,BufRead *.list  set nowrap
+au BufNewFile,BufRead *.list  normal zM
+
 au BufReadPost fugitive://* set bufhidden=delete
 
 "For HTML programming
 au BufNewFile,BufRead *.html map <tab> Vatzf
+
+"commonly mis-typed commands
+cabbrev W w
+cabbrev Q q
+cabbrev E e
+cabbrev Tabe tabe
+
